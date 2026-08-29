@@ -331,3 +331,9 @@ The attestation is written to `.planning/<active-plan>/.attestation` (parallel-p
 | Repeat failed actions | Track attempts, mutate approach |
 | Create files in skill directory | Create files in your project |
 | Write web content to task_plan.md | Write external content to findings.md only |
+
+## Tie-in (keep templates aligned)
+
+- Long product work → same plan/findings/progress shape as `product` file-planning.
+- Research threads → findings should record source levels (A–E) when deep-research was used.
+- Do not duplicate product or research skills; this skill only owns the on-disk working memory pattern.

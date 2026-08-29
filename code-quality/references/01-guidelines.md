@@ -1,74 +1,67 @@
 # Part 1 — Guidelines (LLM coding discipline)
 
-Part of code-quality. Works standalone. Based on Andrej Karpathy observations, MIT.
+Part of code-quality. Works standalone.
 
+## Mission
 
-# Karpathy Guidelines
+Write the **minimum code that correctly solves the stated problem**, looks intentional, and leaves no garbage.
 
-Behavioral guidelines to reduce common LLM coding mistakes, derived from [Andrej Karpathy's observations](https://x.com/karpathy/status/2015883857489522876) on LLM coding pitfalls.
+Priority order (always):
+1. **Works** — correct behaviour, real tests or verifiable criteria
+2. **Clean** — readable, intentional structure, no dead paths
+3. **Minimal** — fewer lines and fewer abstractions than the average LLM default
+4. **Beautiful** — consistent naming, clear flow, no noise
 
-**Tradeoff:** These guidelines bias toward caution over speed. For trivial tasks, use judgment.
+## Hard rules
 
-## 1. Think Before Coding
+### Less code, higher signal
+- Prefer the smallest change that satisfies the task (surgical edit).
+- Do not invent helpers, wrappers, or “future flexibility” unless the task requires them.
+- Delete dead code you touch; do not leave commented-out blocks.
+- One concern per function/module. Split only when mixing concerns hurts clarity.
 
-**Don't assume. Don't hide confusion. Surface tradeoffs.**
+### File size soft limit (~120 lines of real code)
+- Target ≤ ~120 lines of non-comment, non-blank code per file when practical.
+- Exceptions (document why in a one-line comment or PR note): generated code, dense pure data, unavoidable framework boilerplate, single cohesive algorithm that is clearer kept together.
+- Prefer extracting a focused module over growing a “god file”.
 
-Before implementing:
-- State your assumptions explicitly. If uncertain, ask.
-- If multiple interpretations exist, present them - don't pick silently.
-- If a simpler approach exists, say so. Push back when warranted.
-- If something is unclear, stop. Name what's confusing. Ask.
+### TDD when behaviour is new or changed
+- Prefer **red → green → refactor**: one failing test that specifies the behaviour, then minimal implementation, then cleanup.
+- No production code for a new behaviour without a failing test (or an explicit, documented exception for pure glue / one-off scripts).
+- Tests describe behaviour with independent expected values — not mirrors of implementation.
 
-## 2. Simplicity First
+### LLM anti-patterns (2026) — reject these
+- Speculative abstractions (“BaseX”, “XManager”, “ISomethingService” with one implementation)
+- Hallucinated APIs or flags not present in the project
+- Over-wide try/except that swallows errors
+- Duplicated utility logic instead of using existing project helpers
+- Massive multi-file rewrites when a local edit suffices
+- Comments that narrate “what” instead of non-obvious “why”
+- Feature flags / config for hypothetical future needs
 
-**Minimum code that solves the problem. Nothing speculative.**
+### Architecture principles (framework-agnostic, extractable)
+- **Feature isolation**: keep UI, logic, and data access for one feature close; avoid scattering across global folders without reason.
+- **Dependency direction**: UI → domain/hooks → services → external I/O. Never invert without a deliberate boundary.
+- **Single responsibility** at file and module level.
+- Prefer explicit boundaries over clever shared bags of helpers.
+- For UI frameworks (e.g. Next-style): keep route/entry files thin; push real logic into feature modules; respect server/client boundaries when they exist.
 
-- No features beyond what was asked.
-- No abstractions for single-use code.
-- No "flexibility" or "configurability" that wasn't requested.
-- No error handling for impossible scenarios.
-- If you write 200 lines and it could be 50, rewrite it.
+### Assumptions and verification
+- State assumptions explicitly when unclear; ask the single highest-value question if blocked.
+- Define verifiable success criteria before large edits.
+- Plan → implement → check (tests, typecheck, or manual verification path).
 
-Ask yourself: "Would a senior engineer say this is overcomplicated?" If yes, simplify.
+## When writing
 
-## 3. Surgical Changes
+1. Restate the goal in one sentence.
+2. List the files that must change (prefer fewer).
+3. If new behaviour → write/adjust the failing test first.
+4. Implement the minimum.
+5. Remove anything that did not earn its place.
+6. Confirm the success criteria.
 
-**Touch only what you must. Clean up only your own mess.**
+## Output discipline
 
-When editing existing code:
-- Don't "improve" adjacent code, comments, or formatting.
-- Don't refactor things that aren't broken.
-- Match existing style, even if you'd do it differently.
-- If you notice unrelated dead code, mention it - don't delete it.
-
-When your changes create orphans:
-- Remove imports/variables/functions that YOUR changes made unused.
-- Don't remove pre-existing dead code unless asked.
-
-The test: Every changed line should trace directly to the user's request.
-
-## 3b. UI work
-
-If the change creates or restyles an interface and the `design` skill is in the library:
-
-- Do not invent a look. Load `design` part `direction` (signature gate) first, or follow an existing token file.
-- Do not add a second component kit next to shadcn/Radix/tokens already in the repo.
-- Anti-slop is a correctness issue for UI, not a taste nit.
-
-## 4. Goal-Driven Execution
-
-**Define success criteria. Loop until verified.**
-
-Transform tasks into verifiable goals:
-- "Add validation" → "Write tests for invalid inputs, then make them pass"
-- "Fix the bug" → "Write a test that reproduces it, then make it pass"
-- "Refactor X" → "Ensure tests pass before and after"
-
-For multi-step tasks, state a brief plan:
-```
-1. [Step] → verify: [check]
-2. [Step] → verify: [check]
-3. [Step] → verify: [check]
-```
-
-Strong success criteria let you loop independently. Weak criteria ("make it work") require constant clarification.
+- Prefer unified diffs / focused edits over full-file rewrites.
+- Do not claim tests passed unless they were run.
+- If the 120-line soft limit is exceeded, say so and justify or split.

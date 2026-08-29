@@ -1417,3 +1417,67 @@ The primary question is:
 > If an attacker influences the agent, what security boundaries prevent that influence from becoming real-world impact?
 
 Security must hold even when the model behaves incorrectly.
+
+---
+
+# 21. OWASP Agentic Top 10 (ASI01–ASI10) — Ready Checklists (2026)
+
+Use these as mandatory gates in every agent/LLM audit. Map each finding to an ASI ID.
+
+## ASI01 — Agent Goal Hijack
+- [ ] System instructions physically separated from user/tool/RAG content
+- [ ] Untrusted content never can override goals or policy
+- [ ] High-impact actions require explicit HITL confirmation
+- [ ] Attack chain tested: poisoned doc/web/email → goal change → tool call
+
+## ASI02 — Tool Misuse & Exploitation
+- [ ] Every tool has typed schema + allowlist of parameters
+- [ ] Destructive / high-side-effect tools require approval or dual control
+- [ ] Rate limits and cost ceilings per tool/session
+- [ ] Tool descriptions cannot inject instructions into the model
+
+## ASI03 — Identity & Privilege Abuse
+- [ ] Agent identity ≠ user identity; least privilege enforced outside the model
+- [ ] No long-lived admin tokens mounted by default
+- [ ] Confused-deputy and token-audience checks present
+- [ ] User < Agent privilege mismatch is impossible or gated
+
+## ASI04 — Agentic Supply Chain
+- [ ] MCP servers / tools / skills inventory with versions and hashes
+- [ ] Only allowlisted MCP endpoints; no arbitrary runtime discovery without review
+- [ ] Skills and MCP metadata treated as untrusted input
+
+## ASI05 — Unexpected Code Execution
+- [ ] Model-generated code runs only in constrained sandbox (no host socket, no secrets, limits)
+- [ ] No eval/exec of model output on host without explicit authorization
+- [ ] Path traversal / command injection tested on all code/shell tools
+
+## ASI06 — Memory & Context Poisoning
+- [ ] Writes to long-term memory require validation + provenance + scope + TTL
+- [ ] Cross-user / cross-tenant memory isolation verified
+- [ ] Poisoned memory cannot persist goals or secrets across sessions
+
+## ASI07 — Insecure Inter-Agent Communication
+- [ ] Agent-to-agent messages authenticated and integrity-checked
+- [ ] No blind trust of peer agent output as instruction
+
+## ASI08 — Cascading Failures
+- [ ] Failure of one agent/tool does not cascade unbounded privileges or data
+- [ ] Circuit breakers / blast-radius limits defined
+
+## ASI09 — Human-Agent Trust Exploitation
+- [ ] Approval UI shows full action + data that will leave the system
+- [ ] Agent cannot hide or reframe the decision the human is approving
+
+## ASI10 — Rogue Agents
+- [ ] Runtime detection of policy-violating persistent behaviour
+- [ ] Ability to revoke agent identity and tools without full redeploy
+
+## Excessive Agency (LLM Top 10 + ASI cross-cut) — dedicated block
+- [ ] Functionality granted ≤ functionality required for the stated task
+- [ ] Autonomy level (auto / confirm / deny) matches irreversible impact
+- [ ] Model is never the authorization authority — Policy Enforcement Point sits outside the LLM
+- [ ] After successful injection, blast radius is measured and acceptable
+- [ ] No wildcard permissions, unrestricted shell, unrestricted SQL, or unrestricted URL fetch
+
+When testing tools exist (Promptfoo, Semgrep AI rules, vendor agent red-team suites, OWASP Agentic Skills scanners), run them and attach evidence. Never claim a test that was not executed.

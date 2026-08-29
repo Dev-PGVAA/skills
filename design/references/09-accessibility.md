@@ -12,3 +12,12 @@ Full gates and verification: `references/deep/07-accessibility.md`.
 6. `prefers-reduced-motion` respected; no >3Hz flashing; auto-moving content pausable.
 
 Quick verification: compute contrast on worst-case pairs (secondary text on tinted surface, text over image/scrim, disabled); tab through the whole flow; zoom to 200%; grayscale screenshot; emulate reduced motion.
+
+## WCAG 2.2 additions (must-check at AA)
+
+- 2.4.11 Focus Not Obscured (Minimum): focused control not entirely hidden by sticky/fixed UI
+- 2.5.7 Dragging Movements: single-pointer alternative when drag is used
+- 2.5.8 Target Size (Minimum): >=24x24 CSS px or adequate spacing
+- 3.2.6 Consistent Help: help mechanisms in consistent location
+- 3.3.7 Redundant Entry: do not re-ask data already provided in the flow
+- 3.3.8 Accessible Authentication (Minimum): no cognitive tests; allow paste/passkeys/managers

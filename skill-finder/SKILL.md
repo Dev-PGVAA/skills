@@ -1,12 +1,12 @@
 ---
 name: skill-finder
 description: >
-  Lightweight skill dispatcher and inventory. Answers "what skills do I have",
-  "which skill should I use", routes a task to the right skill or skill part,
-  and resolves conflicts between overlapping skills. Also consult this map when
-  starting a substantial multi-step task and unsure which skill fits, or when
-  two skills seem to match. Unlike forced pre-response scanning, this adds zero
-  overhead to simple replies.
+  Lightweight skill dispatcher and inventory. Answers "какие скиллы у меня
+  есть", "what skills do I have", "чем это сделать", routes a task to the right
+  skill or skill part, and resolves conflicts between overlapping skills. Also
+  consult this map when starting a substantial multi-step task and unsure which
+  skill fits, or when two skills seem to match. Unlike forced pre-response
+  scanning, this adds zero overhead to simple replies.
 ---
 
 # Skill Finder
@@ -21,124 +21,72 @@ for a task. Keep it cheap — this is a map, not a ritual.
 - Two or more skills seem to match the same request.
 
 Do NOT force a lookup before every reply. Simple questions, one-liners and
-trivial edits skip this entirely — that overhead is exactly what this skill
-replaces.
+trivial edits skip this entirely.
 
-## Routing map
+## Routing map (August 2026 — 15 skills)
 
-Snapshot of the library (August 2026, Komplekt — 14 skills).
-Big multi-part skills expose invokable parts — route to the part when the task is narrow.
+**Дизайн и сайты**
+- любой дизайн: направление, типографика, сетки, цвет, анти-AI-slop,
+  UI-компоненты, моушн, доступность, ревью → `design`
+  (части: direction, tokens, typography, layout, components, motion,
+  anti-slop, copy, a11y, review + deep-слой с таблицами)
 
-**Design and sites**
-- any design work: direction, typography, grids, color, anti-AI-slop,
-  UI components, motion, accessibility, review → `design`
-  (parts: direction, tokens, typography, layout, components, motion,
-  anti-slop, copy, a11y, review + deep layer with tables)
+**Идеи и продукт** → `product`
+- валидация идеи, вердикт BUILD/PIVOT/DROP, red-team, MVP → часть `evaluate`
+- план с фазами и kill-критериями → часть `plan`
+- спека → тикеты → реализация тикета → часть `spec-to-code`
+- длинные задачи через task_plan/findings/progress → часть `file-planning`
 
-**Ideas and product** → `product`
-- idea validation, BUILD/PIVOT/DROP verdict, contrarian/red-team, MVP → part `evaluate`
-- plan with phases and kill criteria → part `plan`
-- spec → tickets → implement one ticket → part `spec-to-code`
-- long tasks via task_plan/findings/progress → part `file-planning`
+**Ресёрч и отчёты**
+- глубокий ресёрч с уровнями доказательств A–E + фальсификация → `deep-research`
+- большой отчёт 30+ страниц → `research-report`
+- сжатие длинного текста/транскрипта → `summary`
 
-**Research and reports**
-- deep research with evidence levels A–E + contrarian search → `deep-research`
-- long report 30+ pages → `research-report`
-- compress long text/transcript → `summary`
-- “kill the idea / why this is wrong / devil’s advocate” → `product/evaluate` (contrarian), plus `deep-research` when external facts matter
+**Текст и обучение**
+- «очеловечить» прозу / UI microcopy → `humanizer`
+- обучить теме, учебный план → `teach`
 
-**Writing and learning**
-- humanize prose / UI microcopy → `humanizer`
-- teach a topic, learning plan → `teach`
-- Russian language norms, EGE, orthography → `russian-master`
+**Код**
+- дисциплина кодинга, хирургические правки → `code-quality` (часть `guidelines`)
+- ревью диффа/коммита → `code-quality` (часть `review`)
+- актуальная документация библиотек (ctx7) → `context7-cli`
 
-**Code**
-- coding discipline, surgical edits → `code-quality` (part `guidelines`)
-- review a diff/commit → `code-quality` (part `review`)
-- current library docs (ctx7) → `context7-cli`
+**Безопасность** → `security`
+- аудит AI-агентов/LLM/RAG/MCP, threat-model, OWASP 2026 / Agentic → часть `audit`
+- шифрование секретов SOPS+age+1Password → часть `secrets`
 
-**Security** → `security`
-- audit AI agents/LLM/RAG/MCP, threat modeling → part `audit`
-- encrypt secrets SOPS+age+1Password → part `secrets`
+**Ориентация в репо**
+- карта модулей, entry points, where-is, AGENTS.md pointer, draw.io → `codebase-map`
+  (части: orient, diagram)
 
-**Knowledge base / notes** → `graph-surgeon`
-- suggest links while writing a note → part `link-weaver`
-- orphans, black holes, duplicates, top-20 links → part `graph-surgeon`
+**Мета**
+- навигация по библиотеке → `skill-finder` (этот скилл)
+- knowledge-base graph hygiene (Obsidian/Logseq) → `graph-surgeon`
+- on-disk working memory → `planning-with-files`
+- Russian language norms / EGE → `russian-master`
 
-**Meta**
-- create and iterate skills → plugin `skill-creator` (installed from plugins)
-- navigate the library → `skill-finder` (this skill)
-
-**Pipelines** (useful chains):
-
+**Пайплайны**
 ```
-product: evaluate (+contrarian) → plan → spec-to-code
-research: deep-research (falsify) → research-report
+product: evaluate → plan → spec-to-code
+research: deep-research → research-report
 security: audit → secrets
-design:   direction → tokens → … → anti-slop → review
-notes:    link-weaver (while writing) | graph-surgeon (vault audit)
+design: direction → tokens → … → anti-slop → review
 ```
 
 ## Fresh inventory scan
 
-The map above is a snapshot. For a live list, run:
-
-```bash
-for d in ~/.agents/skills/*/ ~/.zcode/skills/*/ ~/.codex/skills/*/; do
-  n=$(basename "$d")
-  [ -f "$d/SKILL.md" ] || continue
-  desc=$(awk '
-    /^description:/ {
-      line = $0
-      sub(/^description:[ \t]*/, "", line)
-      style = line; gsub(/[ \t]/, "", style)
-      if (style ~ /^[>|]([-+])?$/) {
-        buf = ""
-        while ((getline nxt > 0) && (nxt ~ /^[ \t]/)) {
-          sub(/^[ \t]+/, "", nxt); buf = buf (buf ? " " : "") nxt
-        }
-        print buf
-      } else {
-        sub(/^[>|][-+]?[ \t]*/, "", line)
-        print line
-      }
-      exit
-    }' "$d/SKILL.md")
-  echo "- $n: $desc"
-done | sort -u
-```
-
-Present results grouped by category from the map above, marking skills not
-in the snapshot as `new`. Big skills exist in several stores as real copies
-(no symlinks) — count each skill once by name.
+For a live list, run the shell snippet that scans `~/.agents/skills/*/SKILL.md`
+(and equivalent locations) and prints name + description.
 
 ## Conflict resolution
 
-When several skills match one request:
-
-1. **More specific wins**: `research-report` beats `deep-research` for a
-   30-page report; `deep-research` beats `summary` when a decision depends
-   on evidence. A named part beats loading the whole multi-part skill.
-2. **Stage-appropriate wins**: idea → `product/evaluate`; plan →
-   `product/plan`; build → `product/spec-to-code`; visual →
-   `design`; code review → `code-quality/review`.
+1. **More specific wins**: `research-report` beats `deep-research` for a 30-page report; a named part beats the whole multi-part skill.
+2. **Stage-appropriate wins**: idea → product/evaluate; plan → product/plan; visual → design; code review → code-quality/review.
 3. **User-built beats generic** where both fit equally.
-4. If still ambiguous and the choice materially changes the outcome —
-   name the two candidates in one line and let the user pick.
-   Otherwise just pick and announce: “Using [skill] for [goal].”
+4. If still ambiguous and the choice materially changes the outcome — name the two candidates and let the user pick. Otherwise pick and announce: «Использую [skill] для [цель]».
 
 ## Answer formats
 
-**“What skills do I have?”** → grouped list by category (from map or fresh
-scan), one line per skill: name — when to use (with parts for multi-part skills).
+**«Какие скиллы у меня есть?»** → grouped list by category, one line per skill (with parts for multi-part skills).
 
-**“How do I do X?”** → the single best skill (or skill part) plus one
-alternative, e.g.:
-
-```
-Use product, part evaluate (verdict + MVP).
-Alternative: deep-research if you need market facts before deciding.
-```
-
-**Ambiguous task start** → silently pick per conflict rules, announce the
-choice in one line, proceed. Do not list the whole library unprompted.
+**«Чем сделать X?»** → the single best skill (or part) plus one alternative.

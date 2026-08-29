@@ -80,3 +80,24 @@ No reason → no exception.
 ## What "fixed" looks like
 
 The page could not be reused for a different product by swapping the logo and the headline. One signature is loud. Everything else is quiet and on tokens.
+
+
+## 2026 distributional convergence (AI-default suspects)
+
+Models converge on the highest-probability “safe” UI: Inter/system sans, purple/indigo gradients, centered hero, three equal cards, generic rounded-xl cards, glassmorphism without hierarchy, emoji-heavy empty states, “scroll to explore”, identical dashboard metric grids.
+
+**Reject unless the brief explicitly requires them:**
+- Purple/indigo gradient backgrounds as the primary brand signal
+- Inter / Roboto / system-ui as the only type choice without a reason
+- Three identical feature cards with icon + title + two lines
+- Metric cards that do not map to a real product decision
+- Decorative glass/blur that hides hierarchy
+- Placeholder illustrations that could belong to any SaaS
+
+**Prefer:**
+- A deliberate type pairing and limited palette from tokens
+- Hierarchy that reflects product priority, not template symmetry
+- One signature element (shape, motion, type treatment) that is specific to this product
+- Empty and error states written in product voice (see copy part)
+
+Every exception must be documented as intentional in the direction or review notes.
