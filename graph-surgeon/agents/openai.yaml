@@ -1,0 +1,3 @@
+interface:
+  display_name: "Graph Surgeon"
+  short_description: "Vault graph audit + live wikilink suggestions"

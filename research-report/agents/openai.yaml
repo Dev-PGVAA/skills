@@ -1,0 +1,4 @@
+interface:
+  display_name: "Research Report"
+  short_description: "30+ page analytical research reports"
+  default_prompt: "Write a deep analytical research report on this topic"

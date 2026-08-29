@@ -1,0 +1,4 @@
+interface:
+  display_name: "Product"
+  short_description: "Idea to code pipeline in four parts"
+  default_prompt: "Validate an idea, plan, spec and build"

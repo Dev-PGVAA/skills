@@ -1,0 +1,4 @@
+interface:
+  display_name: "Security"
+  short_description: "AI security audit and project secrets"
+  default_prompt: "Audit an AI system or secure project secrets"

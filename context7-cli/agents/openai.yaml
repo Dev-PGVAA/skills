@@ -1,0 +1,4 @@
+interface:
+  display_name: "Context7 CLI"
+  short_description: "Fetch current library docs and manage AI coding skills"
+  default_prompt: "Fetch current docs for a library or manage skills with ctx7"

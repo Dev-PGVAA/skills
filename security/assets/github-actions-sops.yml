@@ -1,0 +1,32 @@
+name: SOPS secret-backed command
+
+on:
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  run:
+    # Attach a protected environment for deployment jobs.
+    runs-on: ubuntu-latest
+    env:
+      SOPS_AGE_KEY: ${{ secrets.SOPS_AGE_KEY }}
+      SOPS_VERSION: v3.13.3
+    steps:
+      - uses: actions/checkout@v7
+
+      - uses: actions/setup-go@v7
+        with:
+          go-version: "stable"
+          cache: false
+
+      - name: Install pinned SOPS
+        run: go install github.com/getsops/sops/v3/cmd/sops@"${SOPS_VERSION}"
+
+      - name: Verify encrypted file
+        run: sops filestatus .env.sops
+
+      - name: Run command with in-memory environment
+        # Replace this command. Never echo the environment.
+        run: sops exec-env .env.sops 'your-ci-command'

@@ -1,0 +1,4 @@
+interface:
+  display_name: "Russian Master"
+  short_description: "Русский язык: нормы, ЕГЭ, сочинение"
+  default_prompt: "Проверь текст и объясни ошибки по нормам русского языка"

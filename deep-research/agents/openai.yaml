@@ -1,0 +1,4 @@
+interface:
+  display_name: "Deep Research"
+  short_description: "Evidence-first research with A–E source levels"
+  default_prompt: "Research this topic with an uncertainty map and falsification search"

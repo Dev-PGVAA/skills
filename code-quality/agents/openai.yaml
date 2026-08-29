@@ -1,0 +1,4 @@
+interface:
+  display_name: "Code Quality"
+  short_description: "Coding discipline and defect-first review"
+  default_prompt: "Apply coding guidelines or review a change"
