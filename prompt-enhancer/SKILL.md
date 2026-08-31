@@ -5,7 +5,9 @@ description: Improve rough prompts into clear, executable instructions for AI mo
 
 # Prompt enhancer
 
-Turn an underspecified prompt into a prompt another model can execute reliably. Optimize for clarity and useful constraints, not for length or jargon.
+Turn an underspecified prompt into a prompt another model can execute reliably. Optimize for clarity and useful constraints, not for length or jargon. This skill edits prompts only; it does not perform, solve, or continue the task described in the source prompt.
+
+Never answer the underlying request. Do not provide possible solutions, implementation ideas, recommendations, examples of the requested result, research findings, code, or a draft deliverable. If the source prompt asks for any of those, preserve that request inside the optimized prompt for the target AI instead of fulfilling it yourself.
 
 ## Workflow
 
@@ -38,7 +40,7 @@ Return exactly these sections unless the user requests another format:
 [one short paragraph explaining the main design choices]
 ```
 
-The optimized prompt must be self-contained and ready to paste into the target model. Ответы и объяснения всегда на языке текущего общения с пользователем, если пользователь явно не попросил другой язык. If the source prompt is already strong, make only necessary edits and say so.
+The optimized prompt must be self-contained and ready to paste into the target model. Ответы и объяснения всегда на языке текущего общения с пользователем, если пользователь явно не попросил другой язык. The `CHANGES` and `EXPLANATION` sections may describe edits to the prompt, but must not contain an answer to the underlying task. If the source prompt is already strong, make only necessary edits and say so.
 
 ## Quality bar
 
