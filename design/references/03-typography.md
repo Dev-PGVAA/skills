@@ -1,27 +1,12 @@
-# Part 3 — Typography (hard rules)
+# Typography
 
-Part of design. Works standalone.
+Preserve the established font system unless changing it is in scope. Choose readability, language coverage, and platform fit before novelty. One family with clear role/weight contrast often works; additional families need a useful role, not an arbitrary ban or quota.
 
-Deep layer: classifications, pairing, full rules by medium — `references/deep/03-typography.md`.
+- Check required glyphs (including Cyrillic when applicable), true styles, numerals, fallback metrics, available font files, and licensing before depending on a font.
+- Start reading text around 16–20px on the web; dense interfaces may use smaller text when actual legibility, scaling, and interaction remain sound. No single font-size floor establishes WCAG compliance. Slides and print need checks at their intended viewing size.
+- Body leading around 1.4–1.6 and a 45–75-character measure are starting points for Latin/Cyrillic text. Adapt to script, typeface, density, screen, and content. Do not shrink unreadable text to fit; fix size, measure, and layout together.
+- Use semantic headings, coherent role tokens, and restrained emphasis. Left-align long LTR prose by default; respect RTL and script-specific conventions. Justification needs suitable hyphenation and rendering checks.
+- Use tabular figures and aligned numeric columns when comparison matters; keep units and precision consistent.
+- Web font loading should balance readability, layout shift, transfer size, and required language coverage. Relative units and flexible line height generally help scaling; test actual zoom and font-size changes.
 
-- ≤2 font families (+ monospace for code/data only). Default to one family with weight/size contrast.
-- Body: web ≥16px (dense data UI 13–14px, floor 12px), print 9.5–12pt, slides ≥18pt.
-- Line-height: body 1.4–1.6 unitless; headings 1.1–1.3; display down to 1.0–1.15.
-- Measure: 45–75 chars per line (`max-width ~65ch`); never fix overlong lines by shrinking type.
-- Tracking: 0 on body; slightly negative on display ≥32px; +0.05–0.1em only on short all-caps labels.
-- Left-align body; justify only with hyphenation (print/PDF). Center only short display text.
-- Paragraphs: indent OR vertical space, never both; no walls of text; widows/orphans controlled in display text.
-- Emphasis: bold/italic one at a time, ≤2 marked phrases per view; underline = link (web); no all-caps sentences; true italic/bold styles only (no faux).
-- Numbers in tables/prices/timers: tabular figures, right-aligned columns.
-- Web: sizes in rem; load 2–4 styles, subset, `font-display: swap`; check fallback metrics.
-
-Decision rules:
-
-```text
-IF unsure how many fonts → 1 family, weights 400/500/700.
-IF a size is needed between two scale steps → use the closer step; don't add steps.
-IF body line length exceeds ~75ch → narrow the container (max-width in ch).
-IF text is unreadable → fix measure/leading/contrast first, size last.
-IF numbers misalign in a table → tabular figures + right-align.
-IF emphasis appears more than ~2× per screen → cut to the single most important.
-```
+More detail: [Typography reference](deep/03-typography.md). Numerical values there are heuristics and platform examples; retain appropriate existing choices.

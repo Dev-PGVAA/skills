@@ -1,4 +1,4 @@
 interface:
   display_name: "Design"
-  short_description: "All-in-one design prompt with hard rules"
-  default_prompt: "Design, redesign or critique an interface end-to-end using the full workflow"
+  short_description: "Product-specific design and evidence-based review"
+  default_prompt: "Use $design to improve this artifact while preserving the brief and verifying the relevant user experience."

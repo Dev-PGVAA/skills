@@ -1,94 +1,41 @@
-# Layout, Grid, Spacing
+# Layout, grid, and spacing reference
 
-Adapted from OERT (CC BY-SA 2.5), IBM Carbon (spacing tokens, 2x grid), BCcampus (CC BY 4.0).
+Attribution retained from the source kit: adapted from OERT (CC BY-SA 2.5), IBM Carbon spacing/grid practices, and BCcampus (CC BY 4.0). Numerical values are examples, not universal constraints.
 
-## Table of contents
-- Spacing scale
-- Spacing levels and grouping
-- Grid
-- Content widths
-- Vertical rhythm and section spacing
-- Density
-- Alignment
-- Decision rules
+## Spacing and grouping
 
-## Spacing scale
+Reuse an existing spacing system. For a new system, a 4/8px base with values such as 2, 4, 8, 12, 16, 24, 32, 40, 48, 64, 80, 96, 128, 160 can cover many web needs. Choose the useful subset. Optical corrections and platform-native measurements can justify off-scale values.
 
-- Build all spacing (padding, margin, gap, inset) from one scale on a **4/8px base unit**. No arbitrary values (13px, 15px, 22px) — snap to the scale, then make deliberate optical exceptions only.
-- Default scale (Carbon-derived; part 2's scale extended with 40, 80, 160 for dense tables and large-format surfaces): 2, 4, 8, 12, 16, 24, 32, 40, 48, 64, 80, 96, 128, 160.
-- Tokenize: `space-1 … space-N`; reference tokens only, never raw px, in component code.
-- This is a normalization rule, not a creativity rule: exact optical adjustments (icon nudges, caps compensation) are allowed but must be few and deliberate.
+Within-component, between-field, between-group, and between-section gaps should make relationships clear. Related items often sit closer than separate groups, but labels, common regions, density, and task structure can override a pure spacing rule. Do not mechanically fail a table because cell padding exceeds a gutter.
 
-## Spacing levels and grouping
+Whitespace, tint, borders, and shadows can complement each other when they communicate distinct roles. Remove redundant boundaries; do not require one separation mechanism for every component.
 
-Define semantic levels, each strictly larger than the previous:
+## Grids and widths
 
-```text
-within-component   4–12    (icon↔label, label↔field)
-between-related    12–24   (field↔field, title↔body inside a card)
-between-groups     24–48   (card↔card, list↔list)
-between-sections   48–128+ (major regions of a page)
-```
+A 12-column desktop / 8-column tablet / 2–4-column mobile grid is one option for responsive layouts. Simple flow, flexbox, content-sized grid, and split panes may suit the product better. Choose breakpoints when content stops working, not solely by device labels.
 
-- Iron rule of proximity: **space inside a group is always smaller than space between groups**. If two cards are 24px apart, elements inside them sit ≤16px apart.
-- Prefer whitespace separation → then background tint → then border → then shadow, in that order of cost. Don't use all four at once.
+| Surface | Illustrative width | Constraint |
+|---|---|---|
+| Reading prose | Around 45–75ch | Actual script, font, content |
+| Single-column form | Often 480–640px | Label length and input purpose |
+| App content | Often 1200–1440px or fluid | Data density and usable scan range |
+| Sidebar | Often 240–320px | Navigation labels and available space |
+| Dialog | Content-sized, viewport-constrained | Task, scrolling, focus, mobile behavior |
 
-## Grid
+These examples do not authorize resizing established layouts outside scope. Use fluid constraints, appropriate min/max dimensions, and overflow behavior.
 
-- Web page layout: 12-column grid (2–4 columns on mobile, 8 on tablet, 12 on desktop), consistent gutters (16–24px), margins ≥ gutters on desktop.
-- Base unit discipline: snap component dimensions and spacing to multiples of 4 (mobile 4/8, desktop 8). Carbon 2x grid: all layout on multiples of 8.
-- Baseline rhythm (text): round line-heights to the base unit (e.g., 16px text ×1.5 = 24px line) so text blocks sit on the grid.
-- Don't center-align entire page sections by default; choose per-section alignment with intent (see 02).
-- Break the grid rarely and deliberately (full-bleed image, pulled quote) — one exception reads as design, many read as noise.
+## Rhythm and density
 
-## Content widths
+A few consistent section gaps can show hierarchy; equal sections can legitimately use equal spacing. Baseline alignment can help editorial layouts, but snapping every line height to a pixel grid must not break text resizing or glyph clearance.
 
-- Running text: 45–75ch (`max-width: 65ch`).
-- App content container: 1200–1440px max; admin/data UI often 100% with max ~1600px.
-- Single-column forms: 480–640px. Modals: 400/600/800px steps. Sidebars: 240–320px.
-- Minimum layout viewport: design down to 320px width without horizontal scroll.
+Comfortable reading surfaces and compact operational surfaces have different needs. Do not shrink text to rescue a broken layout or remove important content to create empty space. Consider progressive disclosure, column priority, filters, and scoped scrolling based on the task.
 
-## Vertical rhythm and section spacing
+## Responsive and reading order
 
-- Use 2–3 distinct section spacings (e.g., 64 for tight, 96 medium, 128 airy) — not one uniform gap everywhere, and not a different value per section.
-- Within a section, heading-to-content gap < section-to-section gap (proximity again).
-- Consistent card padding per surface class (e.g., compact 16, default 24, spacious 32–48).
+Define meaningful stacking order for narrow layouts. Preserve DOM and focus order, long labels, zoom, localization, empty states, and realistic data volume. Test intermediate widths as well as mobile/desktop endpoints.
 
-## Density
-
-Choose density per surface, don't mix randomly:
-
-- **Comfortable (reading/marketing):** 16px body, generous 24–48 gaps, roomy padding.
-- **Compact (data-dense tools):** 13–14px body, 8–12 gaps, tight padding — accept smaller sizes only with full contrast and hit-area compensation.
+For web accessibility, reflow has a 320 CSS px equivalent width requirement with specific exceptions for content needing two dimensions. Scope horizontal scrolling to a table/map region where appropriate; do not hide required data merely to satisfy an overflow detector.
 
 ## Alignment
 
-- Every element aligns to at least one axis; each composition has one dominant axis.
-- Align labels and values consistently in forms (top-aligned labels: fastest scanning; left-aligned labels in narrow forms; right-aligned only for short label sets in wide layouts).
-- Text aligns to text; numbers align to numbers (right/decimal); icons optically center to cap-height/x-height, not to bounding box.
-- Edge alignment beats center alignment for anything with more than 3 elements.
-
-## Decision rules
-
-```text
-IF a spacing value is not in the scale
-THEN snap it to the scale, or document it as a deliberate optical exception.
-
-IF gap between groups ≤ gap inside groups
-THEN increase between-group spacing (proximity is broken).
-
-IF every section is separated by the same gap
-THEN introduce 2–3 section-spacing levels matching importance.
-
-IF a layout feels cramped
-THEN increase whitespace and reduce competing elements — don't shrink type below floors.
-
-IF two elements are separated by both border and background and shadow
-THEN remove separators until one mechanism remains.
-
-IF columns of a grid all collapse on mobile
-THEN define explicit stacking order and full-bleed rules at 320–375px.
-
-IF text lines run past ~75ch at desktop
-THEN cap the text container, keep the grid for chrome.
-```
+Use consistent axes and optical relationships. Align numeric data for comparison and labels to their controls; adjust icon placement to visual balance. Top-aligned, side-aligned, and inline labels each have contexts—there is no universal fastest form layout without task evidence.

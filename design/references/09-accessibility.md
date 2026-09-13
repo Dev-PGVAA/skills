@@ -1,23 +1,13 @@
-# Part 9 — Accessibility (blocker gates)
+# Accessibility — requirements and evidence
 
-Part of design. Works standalone. Failing any of these blocks shipping, regardless of how good it looks.
+Identify the artifact, platform, intended conformance target, and task scope. The checks below cover common web issues, not all WCAG requirements. Distinguish a demonstrated barrier, an applicable criterion failure, a best-practice suggestion, and something untested. A screenshot review cannot certify accessibility.
 
-Full gates and verification: `references/deep/07-accessibility.md`.
+- Measure text contrast against the final background and relevant states. Normal text generally needs 4.5:1 and large text 3:1 at AA; applicable non-text UI information needs 3:1. Exceptions and enhanced targets are in [Accessibility detail](deep/07-accessibility.md).
+- Verify keyboard operation, logical focus order, visible focus, modal behavior, and focus restoration. WCAG AA visible focus does not universally require a two-pixel perimeter; enhanced focus appearance is AAA.
+- Test text resizing to 200%, text-spacing overrides, and reflow at a 320 CSS px equivalent width. These are distinct checks. Two-dimensional content has specific reflow exceptions.
+- Check accessible names, persistent labels where needed, instructions, textual error identification, status announcements, and preservation of entered data.
+- Do not rely on color alone. Evaluate chart labels/patterns and interface states in actual use; grayscale is a useful diagnostic, not a complete color-vision assessment.
+- Check target size and applicable exceptions, dragging alternatives, accessible authentication, and consistent help when relevant.
+- Provide appropriate motion controls and reduced-motion behavior. Avoid flashing and inspect applicable thresholds rather than simplifying the entire standard to a universal 3Hz ban.
 
-1. Contrast on final rendered background: ≥4.5:1 body text; ≥3:1 large text (≥24px / ≥19px bold), icons, input borders, focus rings. Critical text (prices, legal) aims for 7:1 (AAA — target, not a blocker).
-2. Typography in rem; layout survives 200% zoom and 320px reflow; text-spacing overrides don't break containers.
-3. Keyboard: every control reachable, logical order, focus ALWAYS visible (≥2px, ≥3:1; never `outline: none` without replacement); Escape closes overlays.
-4. Color never the only carrier of state/category/series — pair with icon, label, position, or pattern; survives grayscale.
-5. Inputs have persistent visible labels (placeholder ≠ label); errors are text + color + icon adjacent to the field.
-6. `prefers-reduced-motion` respected; no >3Hz flashing; auto-moving content pausable.
-
-Quick verification: compute contrast on worst-case pairs (secondary text on tinted surface, text over image/scrim, disabled); tab through the whole flow; zoom to 200%; grayscale screenshot; emulate reduced motion.
-
-## WCAG 2.2 additions (must-check at AA)
-
-- 2.4.11 Focus Not Obscured (Minimum): focused control not entirely hidden by sticky/fixed UI
-- 2.5.7 Dragging Movements: single-pointer alternative when drag is used
-- 2.5.8 Target Size (Minimum): >=24x24 CSS px or adequate spacing
-- 3.2.6 Consistent Help: help mechanisms in consistent location
-- 3.3.7 Redundant Entry: do not re-ask data already provided in the flow
-- 3.3.8 Accessible Authentication (Minimum): no cognitive tests; allow paste/passkeys/managers
+Fix in-scope barriers and verify the result. Record material preexisting issues outside the requested change without silently expanding a narrow task into a full redesign. Report checks actually performed, their environment, and limits. Use current official criteria for a formal conformance assessment.

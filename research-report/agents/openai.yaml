@@ -1,4 +1,4 @@
 interface:
   display_name: "Research Report"
-  short_description: "30+ page analytical research reports"
-  default_prompt: "Write a deep analytical research report on this topic"
+  short_description: "Analytical reports with verified claim provenance"
+  default_prompt: "Use $research-report to write an evidence-based report at the requested depth, length, and format."

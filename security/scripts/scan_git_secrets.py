@@ -5,7 +5,6 @@ from __future__ import annotations
 
 import argparse
 import json
-import os
 import re
 import subprocess
 import sys
@@ -59,8 +58,7 @@ def git(repo: Path, *args: str, input_bytes: Optional[bytes] = None) -> bytes:
         check=False,
     )
     if proc.returncode != 0:
-        message = proc.stderr.decode("utf-8", "replace").strip()
-        raise RuntimeError(message or f"git {' '.join(args)} failed")
+        raise RuntimeError(f"git command failed (exit {proc.returncode}); output suppressed")
     return proc.stdout
 
 
@@ -94,33 +92,54 @@ def parse_index(repo: Path) -> Iterable[tuple[str, str]]:
             continue
         meta, path = record.split(b"\t", 1)
         fields = meta.split()
-        if len(fields) >= 3 and fields[2] == b"0":
+        if len(fields) >= 3:
             yield fields[1].decode(), path.decode("utf-8", "surrogateescape")
 
 
 def parse_history_objects(repo: Path) -> Iterable[tuple[str, str]]:
-    raw = git(repo, "rev-list", "--objects", "--all")
-    for line in raw.splitlines():
-        oid, separator, path = line.partition(b" ")
-        if separator and path:
-            yield oid.decode(), path.decode("utf-8", "surrogateescape")
+    # Raw NUL-delimited records retain unusual names and every historical path.
+    # rev-list --objects only provides one representative path per shared blob.
+    raw = git(repo, "log", "--all", "--format=", "--raw", "-z", "--no-abbrev", "--no-renames", "--root", "-m")
+    records = iter(raw.split(b"\0"))
+    for record in records:
+        header = record.lstrip(b"\n")
+        if not header.startswith(b":"):
+            continue
+        fields = header.split()
+        if len(fields) != 5:
+            raise RuntimeError("unrecognized Git history record; scan incomplete")
+        path = next(records, None)
+        if path is None:
+            raise RuntimeError("missing Git history path; scan incomplete")
+        oid = fields[3] if set(fields[3]) != {ord("0")} else fields[2]
+        yield oid.decode(), path.decode("utf-8", "surrogateescape")
 
 
-def read_blob(repo: Path, oid: str) -> Optional[bytes]:
+def read_blob(repo: Path, oid: str, coverage: dict[str, int]) -> Optional[bytes]:
     obj_type = git(repo, "cat-file", "-t", oid).strip()
     if obj_type != b"blob":
+        coverage["non_blob_objects"] += 1
         return None
     size_raw = git(repo, "cat-file", "-s", oid).strip()
     try:
         size = int(size_raw)
     except ValueError:
-        return None
+        raise RuntimeError("invalid Git object size; scan incomplete") from None
     if size > MAX_BLOB_BYTES:
+        coverage["oversized_blobs"] += 1
         return None
-    return git(repo, "cat-file", "blob", oid)
+    data = git(repo, "cat-file", "blob", oid)
+    if looks_binary(data):
+        coverage["binary_blobs"] += 1
+        return None
+    if data.startswith(b"version https://git-lfs.github.com/spec/v1\n"):
+        coverage["lfs_pointers"] += 1
+        return None
+    coverage["text_blobs_scanned"] += 1
+    return data
 
 
-def scan_entries(repo: Path, entries: Iterable[tuple[str, str]], scope: str) -> list[Finding]:
+def scan_entries(repo: Path, entries: Iterable[tuple[str, str]], scope: str, coverage: dict[str, int]) -> list[Finding]:
     findings: set[Finding] = set()
     seen: set[tuple[str, str]] = set()
     for oid, path in entries:
@@ -130,10 +149,7 @@ def scan_entries(repo: Path, entries: Iterable[tuple[str, str]], scope: str) -> 
         seen.add(key)
         if is_plain_env(path):
             findings.add(Finding(scope, path, "tracked_plaintext_env", oid[:12]))
-        try:
-            data = read_blob(repo, oid)
-        except RuntimeError:
-            continue
+        data = read_blob(repo, oid, coverage)
         if data is None:
             continue
         for category in content_categories(data):
@@ -152,31 +168,40 @@ def main() -> int:
     try:
         root = Path(git(repo, "rev-parse", "--show-toplevel").decode().strip()).resolve()
     except (RuntimeError, OSError) as exc:
-        print(f"error: not a Git repository: {exc}", file=sys.stderr)
+        print(f"error: not a readable Git repository ({type(exc).__name__})", file=sys.stderr)
         return 1
 
     findings: list[Finding] = []
+    coverage = dict.fromkeys(("text_blobs_scanned", "oversized_blobs", "binary_blobs", "lfs_pointers", "non_blob_objects"), 0)
     try:
         if args.scope in ("index", "all"):
-            findings.extend(scan_entries(root, parse_index(root), "index"))
+            findings.extend(scan_entries(root, parse_index(root), "index", coverage))
         if args.scope in ("history", "all"):
-            findings.extend(scan_entries(root, parse_history_objects(root), "history"))
-    except RuntimeError as exc:
-        print(f"error: {exc}", file=sys.stderr)
+            findings.extend(scan_entries(root, parse_history_objects(root), "history", coverage))
+    except (RuntimeError, OSError) as exc:
+        print(f"error: scan incomplete ({type(exc).__name__})", file=sys.stderr)
         return 1
 
     unique = sorted(set(findings), key=lambda item: (item.scope, item.path, item.category, item.object_id))
+    shallow = git(root, "rev-parse", "--is-shallow-repository").strip() == b"true"
+    limitations = ["Heuristic index/reachable-history scan; excludes untracked files, remote-only refs, reflogs, unreachable objects, binary/LFS payloads and unknown secret formats."]
+    if shallow and args.scope in ("history", "all"):
+        limitations.append("Shallow repository: history coverage is incomplete.")
     if args.json:
-        print(json.dumps({"findings": [asdict(item) for item in unique]}, indent=2))
+        print(json.dumps({"findings": [asdict(item) for item in unique], "coverage": coverage, "limitations": limitations}, indent=2))
     elif unique:
         print("Potential secret exposure found. Values are intentionally redacted.")
         for item in unique:
             object_suffix = f" object={item.object_id}" if item.object_id else ""
-            print(f"- scope={item.scope} path={item.path} category={item.category}{object_suffix}")
+            print(f"- scope={item.scope} path={json.dumps(item.path)} category={item.category}{object_suffix}")
     else:
         print("No matching plaintext env paths or high-confidence secret patterns found.")
 
-    return 2 if unique else 0
+    if not args.json:
+        print("Coverage: " + json.dumps(coverage, sort_keys=True))
+        for limitation in limitations:
+            print("Limit: " + limitation)
+    return 1 if shallow and args.scope in ("history", "all") else (2 if unique else 0)
 
 
 if __name__ == "__main__":

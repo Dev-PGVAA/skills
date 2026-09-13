@@ -1,0 +1,4 @@
+interface:
+  display_name: "Planning With Files"
+  short_description: "Resumable plans and reliable task handoffs"
+  default_prompt: "Use $planning-with-files for the task I describe, preserving its scope."

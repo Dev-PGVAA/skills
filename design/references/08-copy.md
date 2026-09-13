@@ -1,20 +1,13 @@
-# Part 8 — Copy (text as design material)
+# Copy as interface material
 
-Part of design. Works standalone.
+Use the product's established voice and the user's language. Choose familiar nouns and active verbs; retain technical terms when users need them to decide.
 
-- Words are design material. Plain verbs, active voice, sentence case.
-- Name things by what the user controls, not by internals (person manages notifications, not webhook config).
-- Buttons say exactly what happens ("Save changes", not "Submit"); same action keeps the same name through the whole flow ("Publish" → toast "Published").
-- Errors say what happened + how to fix it, no apology, no vague mood; in the interface's voice.
-- Empty states invite the next action; an empty screen is an invitation to act, not a mood.
-- Each element does exactly one job — a label labels, an example demonstrates, nothing does double duty.
-- Specificity test: the copy should not survive transfer to a different product unchanged.
+- Labels name what users control. Buttons describe what happens; preserve consistent action names through the flow.
+- Errors explain the actual problem and a feasible recovery, with useful context and preserved input. Do not invent a cause, expose sensitive internal details, or promise a retry will succeed.
+- Empty states distinguish no content, no matches, loading, unavailable data, and missing access. Offer a relevant next step when one exists.
+- State consequential effects before the action. Confirmation language should identify the real target and consequence when confirmation is appropriate.
+- Marketing claims need evidence. Numerical precision is not mandatory, and missing evidence does not authorize inventing numbers. Avoid unsupported superlatives and generic benefit phrases.
+- Headings tell readers what follows; CTAs clarify the action. Familiar "Save" or "Learn more" can be correct in a clear context.
+- Edit repetition and filler while preserving meaning. Do not mechanically cut one third or demand that every ordinary UI label be unique to the product.
 
-Marketing and long-form text:
-
-- Headlines state the concrete subject or benefit, not a mood ("Invoice approval in one pass", not "A new era of efficiency"); no hype words (see part 7 anti-slop).
-- Body copy delivers exactly what the headline promised — no bait, no switch.
-- CTAs continue the sentence "I want to …" ("Start free trial", "Download the checklist"); one CTA per block.
-- Claims carry a number or a name, or they are cut; superlatives only when verifiable ("2× faster than v3", not "blazing fast").
-- One idea per sentence, one job per paragraph; after drafting, cut by a third.
-- Tone stays one voice across surfaces — UI, empty states, emails, landing page; formality matches the audience, not the template.
+Check real string lengths, localization, plurals, dates/numbers, line wrapping, and screen-reader names. Preserve user-approved text unless editing it is in scope.

@@ -1,3 +1,4 @@
 interface:
   display_name: "Graph Surgeon"
-  short_description: "Vault graph audit + live wikilink suggestions"
+  short_description: "Evidence-based note links and vault repairs"
+  default_prompt: "Use $graph-surgeon for the task I describe, preserving its scope."

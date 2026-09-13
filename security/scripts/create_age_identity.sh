@@ -19,6 +19,7 @@ die() {
 }
 
 [[ $# -ge 1 ]] || { usage >&2; exit 1; }
+[[ "$1" != --help && "$1" != -h ]] || { usage; exit 0; }
 profile=$1
 shift
 output=''
@@ -46,10 +47,10 @@ done
 
 [[ -n "$output" ]] || die '--output is required'
 [[ "$output" = /* ]] || die '--output must be an absolute path outside the repository'
-[[ ! -e "$output" ]] || die "refusing to overwrite existing identity: $output"
+[[ ! -e "$output" && ! -L "$output" ]] || die "refusing to overwrite existing identity: $output"
 
 output_dir=$(dirname "$output")
-mkdir -p "$output_dir"
+(umask 077; mkdir -p "$output_dir")
 output_dir=$(cd "$output_dir" && pwd -P)
 output="$output_dir/$(basename "$output")"
 
@@ -76,12 +77,15 @@ case "$access_control" in
   *) die "unsupported access control: $access_control" ;;
 esac
 
+private_stage=$(mktemp -d "$output_dir/.age-keygen.XXXXXX")
+trap 'rm -rf "$private_stage"' EXIT
+staged_output="$private_stage/identity.txt"
 case "$profile" in
   portable)
     command -v age-keygen >/dev/null 2>&1 || die 'age-keygen not found; install age first'
     (
       umask 077
-      age-keygen -o "$output"
+      age-keygen -o "$staged_output"
     )
     ;;
   secure-enclave)
@@ -92,7 +96,7 @@ case "$profile" in
     command -v age-plugin-se >/dev/null 2>&1 || die 'age-plugin-se not found; install it first'
     (
       umask 077
-      age-plugin-se keygen --access-control "$access_control" -o "$output"
+      age-plugin-se keygen --access-control "$access_control" -o "$staged_output"
     )
     ;;
   *)
@@ -100,6 +104,8 @@ case "$profile" in
     ;;
 esac
 
-chmod 600 "$output"
+chmod 600 "$staged_output"
+# Hard-link publication refuses overwrite, including dangling symlinks and races.
+ln "$staged_output" "$output" || die 'could not publish identity without overwriting a path'
 printf 'Identity created outside Git: %s\n' "$output" >&2
 printf 'Back it up only if the profile is portable. Secure Enclave identities are device-bound.\n' >&2

@@ -1,4 +1,4 @@
 interface:
   display_name: "Summary"
-  short_description: "Condense long material into signal"
-  default_prompt: "Use $summary to summarize this clearly and concisely."
+  short_description: "Faithful summaries, evidence, and action items"
+  default_prompt: "Use $summary to condense these sources while preserving attribution, uncertainty, and commitments."

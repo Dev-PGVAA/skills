@@ -1,97 +1,56 @@
-# Accessibility — Hard Gates
+# Accessibility reference — common web checks
 
-WCAG 2.1/2.2 (W3C) AA numbers relevant to visual design. These are gates, not advice: an artifact is not "done" while any fails.
-
-## Table of contents
-- Contrast
-- Text and sizing
-- Focus and keyboard
-- Color independence
-- Targets and spacing
-- Motion
-- Forms and states
-- Reading-friendly typography
-- Quick verification
+Based on W3C WCAG 2.2 and its Understanding documents. This is a selected implementation checklist, not a substitute for the full standard or a conformance audit. Applicability, exceptions, supported environments, and evidence matter. Official pages below were consulted on 2026-09-12; verify the relevant criterion for formal or version-sensitive work.
 
 ## Contrast
 
-| Element | Minimum |
-|---|---|
-| Body/normal text | 4.5:1 |
-| Large text (≥24px, or ≥19px bold) | 3:1 |
-| Icons, focus indicators, input borders | 3:1 |
-| Critical small text (prices, legal, medical) | 7:1 (AAA) |
+- Under 1.4.3 (AA), normal text generally needs 4.5:1 and large text 3:1. Large means at least 18pt (24 CSS px), or 14pt bold (about 18.67 CSS px). Incidental/inactive text and logos have exceptions.
+- Under 1.4.11 (AA), required visual information identifying active UI components/states and meaningful graphics generally needs 3:1 against adjacent colors. This is not a rule that every decorative border or icon must have that ratio. Inactive controls and certain unmodified native appearances are excepted.
+- 1.4.6 (AAA) raises text contrast to 7:1 normal and 4.5:1 large. Choosing stronger contrast for critical information is useful, but "legal text" does not create a separate AA 7:1 requirement.
 
-Measure against the final composed background (cards, images, gradients included).
+Measure the actual composed background, including images, tints, gradients, overlays, hover/selected states, and focus. Do not round a failing ratio upward. Source: [Non-text contrast](https://www.w3.org/WAI/WCAG22/Understanding/non-text-contrast.html), [Text contrast](https://www.w3.org/WAI/WCAG22/Understanding/contrast-minimum.html).
 
-## Text and sizing
+## Text resizing, reflow, and spacing
 
-- Size typography in `rem` (root-relative) so user font-size settings scale it. Avoid fixed `px` for fonts; never use `px` in `line-height` (unitless only).
-- Support 200% browser zoom and 320px width without horizontal scrolling (reflow, WCAG 1.4.10).
-- No text inside images (except logos). If unavoidable, provide equivalent real text.
-- Respect text-spacing overrides: layouts must survive increased line-height (1.5×), letter/word spacing (WCAG 1.4.12) — use flexible containers, no fixed-height text boxes.
-- Never disable pinch zoom (`user-scalable=no`) on reading content.
+These are separate checks:
 
-## Focus and keyboard
+- 1.4.4 (AA): text can resize to 200% without loss of content or functionality, with specified exceptions.
+- 1.4.10 (AA): vertically scrolling content works at a width equivalent to 320 CSS px without requiring two-dimensional scrolling. For horizontal writing/scrolling cases the criterion includes a 256 CSS px equivalent height. Content requiring two dimensions, such as some tables and maps, is excepted; keep scrolling scoped and usable.
+- 1.4.12 (AA): applicable markup content tolerates text-spacing overrides—line height 1.5 times font size, paragraph spacing twice font size, letter spacing 0.12em, word spacing 0.16em—without loss. These are test overrides, not mandatory default typography.
 
-- Every interactive element reachable and operable by keyboard, in logical order.
-- Focus indicator always visible: ≥2px, ≥3:1 contrast against adjacent colors, ≥2px offset or clear outline replacement (e.g., inner ring). Never `outline: none` without a substitute.
-- No keyboard traps; modals trap focus intentionally and restore it on close; `Escape` closes overlays.
-- Skip-to-content link on pages with repeated navigation.
+Relative units, flexible text boxes, and avoiding disabled zoom help implementation; a unit choice alone proves nothing. Test 200% text/zoom and a narrow or 400%-zoom equivalent reflow case separately. Source: [Reflow](https://www.w3.org/WAI/WCAG22/Understanding/reflow.html).
 
-## Color independence
+## Keyboard and focus
 
-- Color is never the only signal for state, category, required fields, errors, or chart series (WCAG 1.4.1) — pair with icon, text, pattern, position, or underline for links.
-- Distinguish states also when viewed in grayscale and by color-blind users (see 05).
+Verify keyboard access, operation, logical sequence, absence of traps, visible focus, and predictable transitions. Modal focus containment can be intentional when users can close the dialog and return to a sensible location. Escape behavior should match the widget pattern; it is not a universal rule for every overlay.
 
-## Targets and spacing
+2.4.7 (AA) requires visible focus. 2.4.11 (AA) requires that focused components are not entirely obscured by author-created content. 2.4.13 Focus Appearance is **AAA** and specifies enhanced indicator area and contrast with exceptions. A strong two-pixel outline is a useful design technique, not a universal AA geometry requirement.
 
-- Minimum pointer target 24×24 CSS px (WCAG 2.2 AA); recommended 44×44 (Apple) / 48dp (Android).
-- Adjacent targets ≥8px apart; inline link lists add spacing so targets don't overlap.
+Check native versus custom focus behavior, sticky UI, scroll containers, dialogs, skip links, and restoration after deletion or async changes. Source: [Focus appearance](https://www.w3.org/WAI/WCAG22/Understanding/focus-appearance.html).
 
-## Motion
+## Pointer targets and alternatives
 
-- Respect `prefers-reduced-motion: reduce`: remove movement/parallax/auto-carousels; keep opacity/color transitions.
-- Nothing flashes more than 3 times/second (WCAG 2.3.1).
-- Auto-playing/moving content >5s needs pause/stop/hide (2.2.2).
+2.5.8 (AA) generally requires a target to contain a 24×24 CSS px square. Exceptions cover spacing, equivalent controls, inline targets, unmodified user-agent controls, and essential presentation. For undersized targets, its spacing exception evaluates 24px-diameter circles centered on target bounding boxes against other targets/circles; there is no universal eight-pixel gap rule.
 
-## Forms and states
+44pt Apple and 48dp Material targets are platform design guidance in different units. Larger web targets often improve usability, but do not substitute platform numbers for the actual WCAG rule. Check pointer cancellation, accessible alternatives to dragging (2.5.7), and complex gestures when relevant. Source: [Target size minimum](https://www.w3.org/WAI/WCAG22/Understanding/target-size-minimum.html).
 
-- Every input has a persistent visible label (placeholder is not a label).
-- Errors: text message (what happened + how to fix) + color + icon; errors appear adjacent to the field; don't clear user input on error.
-- Required fields marked by more than color/asterisk convention alone (label or "(required)").
-- Disabled controls: visually distinct, ≥3:1 where feasible, plus tooltip/legend explaining why.
+## Meaning, forms, and status
 
-## Reading-friendly typography
+- Color alone must not carry information; pair state and chart categories with text, icon, pattern, shape, or another suitable cue.
+- Native semantic controls are preferable where suitable. Verify name, role, value, and state for custom widgets; icon-only controls need accessible names and a tooltip alone is insufficient.
+- Inputs need appropriate labels or instructions. Placeholders are often inadequate because they disappear; bind labels programmatically and preserve visible context.
+- Identify errors in text, connect them to fields, offer a correction when known, and preserve valid input. An extra icon is optional, not universally mandatory.
+- Announce relevant status messages without stealing focus. Evaluate screen-reader output for critical dynamic flows when tools permit.
+- Check redundant entry (3.3.7), consistent help (3.2.6), and accessible authentication (3.3.8) where applicable. Authentication cognitive-test rules have conditions and exceptions; supporting password managers and paste is useful but not the whole criterion.
 
-- Body line-height ≥1.4 in dense UI and ≥1.5 on reading surfaces (part 3 range 1.4–1.6). Layout must tolerate user text-spacing overrides (WCAG 1.4.12): line-height 1.5×, paragraph spacing 2× font size, letter-spacing 0.12em, word-spacing 0.16em.
-- Left-align (LTR) long text; no justified text without hyphenation (rivers harm dyslexic readers).
-- Avoid all-italic or all-caps long passages; underline links inside text so they're findable without color vision.
-- Content in plain language; abbreviations expanded on first use.
+## Motion and flashing
 
-## Quick verification
+Honor user motion preferences and provide a static or low-motion equivalent when needed. WCAG 2.3.3 (AAA) specifically addresses interaction-triggered motion animation; reduced-motion CSS support alone does not establish conformance with all motion criteria.
 
-- Compute contrast with a checker (or formula) on worst-case pairs: secondary text on surface, text over scrim, disabled labels.
-- Tab through the whole flow — focus visible and ordered everywhere?
-- Zoom to 200% / set root font to 18–20px — does layout survive?
-- Grayscale screenshot — is every state/series still distinguishable?
-- `prefers-reduced-motion` emulation — does anything essential depend on motion?
+2.2.2 (A) governs qualifying moving, blinking, scrolling, and auto-updating content, with controls and exceptions. 2.3.1 (A) permits either no more than three flashes per second or flashes below specified general/red-flash thresholds. Avoid flashing; do not claim safety from frequency alone when content needs formal analysis.
 
-## Decision rules
+## Practical evidence record
 
-```text
-IF contrast can't reach 4.5:1 at current size
-THEN darken text or enlarge (≥24px = 3:1 allowed) — never lighten to "look nicer".
+For each relevant check record the flow/state, browser or renderer, viewport/zoom, method, observation, and result: pass, fail, not applicable with reason, or untested. A contrast calculator checks color pairs; an automated scan catches some structural issues; a screenshot shows visible layout; a keyboard pass shows keyboard behavior. None alone establishes full accessibility.
 
-IF focus is invisible on a dark or busy background
-THEN use a double ring / offset outline with its own contrast.
-
-IF an error state is red border only
-THEN add icon + message text adjacent to the field.
-
-IF controls are 24px targets in a touch context
-THEN enlarge to ≥44px hit areas.
-
-IF animation is essential to understanding
-THEN provide a static equivalent under reduced motion.
-```
+Use [WCAG 2.2](https://www.w3.org/TR/WCAG22/) and its current Understanding documents to resolve precise questions. Avoid treating a local checklist or heuristic as the normative standard.

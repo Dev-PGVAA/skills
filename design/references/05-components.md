@@ -1,13 +1,13 @@
-# Part 5 — Components and states
+# Components and states
 
-Part of design. Works standalone.
+Reuse existing primitives and native conventions. A component should make its purpose, state, and available action understandable.
 
-Deep layer: M3/Apple type scales, states, platforms — `references/deep/06-ui-design.md`.
+- Prioritize actions per decision region; use secondary and destructive treatment where it clarifies choices. Design appropriate confirmation or undo for the consequence, without redundant prompts for already authorized actions.
+- Labels describe the action in the user's language. Brevity helps, but a three-word limit must not remove necessary meaning.
+- Implement relevant states: focus, hover where supported, pressed, selected, disabled, loading, success, empty, and error as appropriate to the component. Not every link needs every state.
+- Prefer native semantic elements. Icon-only controls need an accessible name; a tooltip alone is not a reliable label. Standard icons can be appropriate without visible text when meaning and accessible naming are clear.
+- Touch targets benefit from generous hit areas. Web WCAG 2.2 AA target rules include sizing and exceptions; see [Accessibility detail](deep/07-accessibility.md). Platform points, density-independent pixels, and CSS pixels are not interchangeable units.
+- Explain why an action is unavailable where useful. Do not add `pointer-events: none` or remove keyboard access indiscriminately; choose correct disabled semantics for the element and behavior.
+- Preserve user input on recoverable error and support a concrete retry path. Ensure loading and completion do not cause unexpected focus loss or duplicate actions.
 
-- One filled primary button per region; secondary = tonal/outline; tertiary = text. Destructive actions colored, separated from primary, confirmed if irreversible.
-- Button labels: verb + object, ≤3 words, sentence case, same action keeps the same label everywhere.
-- Design ALL states up front: default, hover, active, focus-visible, selected, disabled, loading, error. Hover gated behind `@media (hover: hover)`.
-- Targets ≥44×44px touch (Apple) / 48dp (Material); absolute floor 24×24; ≥8px between adjacent targets; expand hit areas for links/icon buttons.
-- Icons: one family, one stroke weight, sizes 16/20/24/32; icon-only controls get names; icons support labels, never replace them in nav/actions.
-- Selected/active state carries ≥2 cues (weight + color, or filled indicator).
-- Native platforms (iOS/Android): follow platform conventions unless product identity demands a consistent divergence.
+More detail: [UI roles and platform examples](deep/06-ui-design.md).

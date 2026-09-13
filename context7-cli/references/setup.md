@@ -1,43 +1,23 @@
-# Setup
+# Configure Context7
 
-## ctx7 setup
+Setup writes agent configuration and may initiate authentication. Perform it only within the requested project/global scope. Discover the available CLI version and `ctx7 setup --help`, then inspect existing target configuration without exposing credentials. Preserve unrelated MCP servers, settings, and skill files; back up files that will be replaced.
 
-One-time command to configure Context7 for your AI coding agent. Prompts for mode on first run:
-- **MCP server** — registers the Context7 MCP server so the agent can call tools natively
-- **CLI + Skills** — installs a `find-docs` skill that guides the agent to use `ctx7` CLI commands (no MCP required)
+## Choose the actual target
+
+Supported targets vary by version. Current upstream supports Codex, but do not assume an older installed CLI accepts the same flags. Typical shape after confirming help:
 
 ```bash
-ctx7 setup                     # Interactive — prompts for mode, then agent/install target
-ctx7 setup --mcp               # Skip prompt, use MCP server mode
-ctx7 setup --cli               # Skip prompt, use CLI + Skills mode
-
-# MCP mode — target a specific agent
-ctx7 setup --claude            # Claude Code only
-ctx7 setup --cursor            # Cursor only
-ctx7 setup --opencode          # OpenCode only
-
-# CLI + Skills mode — target a specific install location
-ctx7 setup --cli --claude      # Claude Code (~/.claude/skills)
-ctx7 setup --cli --cursor      # Cursor (~/.cursor/skills)
-ctx7 setup --cli --universal   # Universal (~/.agents/skills)
-ctx7 setup --cli --antigravity # Antigravity (~/.config/agent/skills)
-
-ctx7 setup --project           # Configure current project instead of globally
-ctx7 setup --yes               # Skip confirmation prompts
+ctx7 setup --mcp --codex --project
 ```
 
-**Authentication options:**
-```bash
-ctx7 setup --api-key YOUR_KEY  # Use an existing API key (both MCP and CLI + Skills mode)
-ctx7 setup --oauth             # OAuth endpoint — MCP mode only (IDE handles the auth flow)
-```
+Use global scope only when requested. CLI+Skills mode and MCP mode write different resources; select based on the user's request and available capabilities. Do not configure other editors because they are auto-detected. Do not use `--yes` to conceal an unresolved target or replacement decision.
 
-Without `--api-key` or `--oauth`, setup opens a browser for OAuth login. MCP mode additionally generates a new API key after login. `--oauth` is MCP-only.
+## Authentication
 
-**What gets written — MCP mode:**
-- MCP server entry in the agent's config file (`.mcp.json` for Claude, `.cursor/mcp.json` for Cursor, `.opencode.json` for OpenCode)
-- A Context7 rule file instructing the agent to use Context7 for library docs
-- A `context7-mcp` skill in the agent's skills directory
+Prefer the user's existing authentication or supported OAuth/hidden-input flow. `CONTEXT7_API_KEY` may be supplied through an existing secret environment. Do not paste keys into the command line, write literal keys in chat, or print config containing them. Avoid triggering login when anonymous docs access already satisfies the task.
 
-**What gets written — CLI + Skills mode:**
-- A `find-docs` skill in the chosen agent's skills directory, guiding the agent to use `ctx7 library` and `ctx7 docs` commands
+Setup may generate credentials and write rules/skills as well as an MCP entry; inspect the actual result. Confirm that existing entries survive and test one harmless docs request when the new connection becomes available. A config file written successfully is not proof that the running host has loaded it; identify a required reload without claiming live success.
+
+For removal, inspect `ctx7 remove --help` and the exact resources previously installed. Remove only the requested Context7 scope; do not erase the agent's entire config or unrelated skill directories.
+
+[Official CLI setup and removal](https://github.com/upstash/context7/tree/master/packages/cli), checked 2026-09-12.

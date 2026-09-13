@@ -11,7 +11,6 @@ jobs:
     # Attach a protected environment for deployment jobs.
     runs-on: ubuntu-latest
     env:
-      SOPS_AGE_KEY: ${{ secrets.SOPS_AGE_KEY }}
       SOPS_VERSION: v3.13.3
     steps:
       - uses: actions/checkout@v7
@@ -29,4 +28,6 @@ jobs:
 
       - name: Run command with in-memory environment
         # Replace this command. Never echo the environment.
-        run: sops exec-env .env.sops 'your-ci-command'
+        env:
+          SOPS_AGE_KEY: ${{ secrets.SOPS_AGE_KEY }}
+        run: sops exec-env .env.sops 'env -u SOPS_AGE_KEY -u SOPS_AGE_KEY_FILE -u SOPS_AGE_KEY_CMD your-ci-command'

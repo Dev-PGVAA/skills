@@ -1,4 +1,4 @@
 interface:
   display_name: "Humanizer"
-  short_description: "Make AI-written text sound genuinely human"
-  default_prompt: "Use $humanizer to rewrite this text in a natural voice while preserving its meaning."
+  short_description: "Natural prose with meaning and voice preserved"
+  default_prompt: "Use $humanizer to edit this text naturally while preserving every claim and qualification."

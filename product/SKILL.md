@@ -1,25 +1,23 @@
 ---
 name: product
-description: One skill for the full path from raw idea to working code, in four invokable parts. Evaluate — validate any business or product idea (problem, demand, market, economics, tech feasibility, moat, distribution) and get a verdict BUILD / TEST FIRST / REWORK / PIVOT / DROP plus aggressive contrarian/red-team, a stronger version, MVP and experiment plan. Plan — turn a validated idea into executable action with milestones, success metrics, kill criteria and build-measure-decide loops, no fake productivity. Spec-to-code — disciplined pipeline interview → SPEC.md → small dependency-aware tickets in TICKETS.md → safe implementation of one ticket at a time. File-planning — run long multi-step tasks through task_plan / findings / progress files (Manus-style working memory on disk). Invoke a part by name or run the whole pipeline. Triggers include idea validation, should I build this, MVP, roadmap, action plan, spec, requirements, tickets, implement a feature.
+description: Evaluate product ideas, design validation experiments, plan delivery, or turn requirements into working software. Use the requested stage—evaluate, plan, spec-to-code, or file-planning—without forcing discovery or approval steps the task does not need.
 ---
 
-# Product — Idea → Plan → Spec → Code
+# Product — Idea to working software
 
-One skill, four parts. Each part lives in `references/`, is self-contained, and matches one stage of taking an idea to shipped code. The output of one stage feeds the next, but every part works alone.
+Enter at the stage the user actually requested. An evaluation is not authorization to build; an implementation request is not a request to restart market discovery. Preserve prior decisions, established architecture, approved scope, and explicit planning-before-implementation boundaries.
 
-## Parts
-
-| Part | File | Invoke for |
+| Part | Reference | Use when |
 |---|---|---|
-| `evaluate` | `references/01-evaluate.md` | Validate an idea, run contrarian/red-team, get a verdict and MVP/experiments |
-| `plan` | `references/02-plan.md` | Action plan, roadmap, milestones with metrics and kill criteria |
-| `spec-to-code` | `references/03-spec-to-code.md` | Interview → SPEC.md → tickets → implement one ticket |
-| `file-planning` | `references/04-file-planning.md` | Organize a long multi-step task through plan/findings/progress files |
+| `evaluate` | [Evaluate](references/01-evaluate.md) | Assess demand, feasibility, economics, risks, variants, and experiments |
+| `plan` | [Plan](references/02-plan.md) | Convert a chosen direction into milestones and evidence-based decisions |
+| `spec-to-code` | [Spec to code](references/03-spec-to-code.md) | Resolve material requirements and implement the authorized scope |
+| `file-planning` | [File planning](references/04-file-planning.md) | Persist decisions and progress for substantial work |
 
-## How to invoke
+Read only relevant parts. Use the entire pipeline only when requested or genuinely necessary to deliver the authorized outcome. Small clear changes can go directly to code with brief acceptance criteria; long projects may use durable specs and tickets.
 
-- User names a part → load ONLY that part's file and apply it.
-- Idea without a plan → run parts in order 01 → 02 → 03; `file-planning` is optional scaffolding for long sessions (its full templates and scripts live in `references/planning-with-files/`).
-- Natural entry points: an idea → `evaluate`; a BUILD verdict → `spec-to-code` stage 2; a ready spec → `spec-to-code` stage 3.
+Quality bar: claims have evidence or explicit assumptions; commercial and noncommercial goals are evaluated on their own terms; experiments test the decisive uncertainty; implementation has observable acceptance evidence. Suggest stronger variants without silently replacing the user's product.
 
-Quality bar inherited by every part: no invented facts, confidence levels on conclusions, cheapest test first, smallest viable scope.
+## Subagents
+
+Use independent agents only when a stage has separable work and delegation is supported and permitted. The stage references define suitable roles. The parent assigns narrow questions or file ownership, provides constraints and required evidence, works on a useful complementary task, and integrates one result. Do not parallelize shared-file edits or dependent decisions. Default to no recursive delegation and use sequential specialist passes when tools or scope do not justify agents.

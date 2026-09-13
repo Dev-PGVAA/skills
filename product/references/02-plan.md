@@ -1,193 +1,49 @@
-# Part 2 — Plan (validated idea to executable action)
+# Plan — chosen direction to executable work
 
-Part of product. Works standalone.
+Create the shortest credible route to the user's outcome. Use established evidence, requirements, decisions, resources, and approval boundaries. A plan for an existing product fix does not need new market validation; a new commercial idea may need validation before expensive delivery.
 
+## Start from constraints and uncertainty
 
+Identify the deliverable, current state, scope, owner where known, dependencies, deadlines, resources, and material unknowns. Distinguish fixed user constraints from your estimates. State assumptions rather than inventing dates, budgets, team members, or capacity.
 
-# Execution
+Prioritize fatal uncertainties and dependency blockers; then deliver a usable slice, verify real use, and improve the outcome. Scale, automation, or business metrics apply only when relevant. A learning project can measure demonstrated competence; an internal tool can measure task success and time saved.
 
-Convert strategy into action.
+## Milestone design
 
-Never create 50 vague tasks.
+Every milestone should produce a reviewable outcome. Capture the fields that matter:
 
-Determine the shortest route from:
+- Outcome and why it is needed now.
+- Deliverable, responsible owner if known, and dependencies.
+- Observable acceptance criterion or evidence to collect.
+- Resource or time estimate, with assumptions and uncertainty.
+- Next decision, material risk, and fallback.
 
-UNKNOWN → EVIDENCE.
+For validation experiments add measurement method, denominator, decision threshold, and a timebox justified by the test. Commercial kill criteria can help contain speculative spending; they are not mandatory for every coding task or user-chosen project. Label suggested thresholds and dates as proposals unless agreed.
 
+Use dependency order and the smallest useful milestone to expose the critical path. Separate work that can proceed independently from work awaiting a decision, credential, or external event. Do not hide waiting time in a coding estimate or promise delivery dates without capacity evidence.
 
-# Execution hierarchy
+## Software plan
 
-Work in this order:
+Define must-have behavior, explicit exclusions, necessary integrations, acceptance evidence, and technical uncertainties. Reuse established architecture. Evaluate build/buy/open-source/defer only where a real component decision remains. Include migrations, rollback, failure recovery, and access boundaries when material to the change.
 
-1. fatal assumptions
-2. validation
-3. MVP
-4. first users
-5. retention
-6. economics
-7. automation
-8. scaling
+Prefer vertical slices over disconnected setup tasks. A ready milestone combines implementation and appropriate verification; "frontend done" and "backend done" may conceal a broken end-to-end flow. Do not require one PR per ticket or stop after each ticket when the user authorized the whole scope.
 
-Do not optimize scale before proving value.
+## Business and creator experiments
 
+Select the least expensive test that can answer the critical question: a draft or prototype, benchmark, manual workflow, interview plan, paid pilot plan, or content experiment. Drafting a plan does not authorize sending outreach, publishing content, taking preorders, collecting personal data, or spending money.
 
-# Milestone format
+For content work compare batches on a defined funnel outcome, audience, and time window. Reach alone is not intent or revenue. Include production effort and conversion economics before scaling spend. Diversification can reduce platform risk, but do not add channels before their cost and purpose justify them.
 
-Every milestone must contain:
+## Iterate on evidence
 
-OBJECTIVE
+Build or test → measure → explain → decide. Outcomes can be continue, change, reduce scope, collect more evidence, pivot, or stop. Record what observation drives the decision; do not mechanically stop a project because an invented threshold was missed. Keep user-approved scope changes explicit.
 
-WHY
+Avoid giant roadmaps, vanity metrics, premature branding, speculative infrastructure, routine meetings disguised as milestones, and documentation whose only purpose is documenting the plan.
 
-DELIVERABLE
+## Planning agents
 
-OWNER if known
+If a substantial plan has independent constraints, delegate a bounded feasibility/dependency review or an acceptance/risk review while the parent assembles milestones. Return missing dependencies, evidence, estimate assumptions, and specific corrections. Only the parent edits the canonical plan and resolves ordering. Use sequential review for smaller plans or when agents are unavailable.
 
-SUCCESS METRIC
+## Deliver
 
-FAIL CONDITION
-
-DEPENDENCIES
-
-NEXT DECISION
-
-TIME-BOX (calendar days or weeks — a number, not "soon")
-
-KILL CRITERIA (what evidence stops the work; who decides; by which date)
-
-
-# Time-box and kill (hard)
-
-A plan without a date and a kill condition is a wish list.
-
-- Every phase has a calendar bound (e.g. "14 days" or "by 12 Sep").
-- Kill criteria are observable: "fewer than 10 paid waitlist, or CAC > X, or the assumption Y is false".
-- After the time-box, the next decision is only: continue / cut scope / stop. "Keep going" without a new bound is not a decision.
-- Do not invent productivity (status meetings, extra docs) as milestones.
-
-
-
-# Software MVP
-
-For software projects define:
-
-## Scope
-
-Must-have.
-
-Explicitly exclude nice-to-have features.
-
-## Architecture
-
-Use minimal viable architecture.
-
-## Components
-
-frontend
-backend
-database
-auth
-API
-AI
-storage
-deployment
-
-Only components actually required.
-
-## Build vs buy
-
-For each component decide:
-
-BUILD
-BUY
-OPEN SOURCE
-DEFER
-
-## Technical risks
-
-Identify blockers before coding.
-
-
-# Business MVP
-
-Possible validation:
-
-landing page
-preorder
-outbound
-manual service
-prototype
-paid pilot
-waitlist
-creator content
-sales calls
-
-Choose the cheapest experiment capable of invalidating the assumption.
-
-
-# Creator business execution
-
-For creator and faceless projects the content system IS the validation engine.
-
-- Publish content as the cheapest test of demand before building the product.
-- Treat each piece of content as an experiment: hook/format/topic → metric (CTR, profile visits, clicks, sales).
-- Run BUILD → MEASURE → EXPLAIN → DECIDE per content batch, not per single post.
-- Build a repeatable content system (formats, hooks, cadence) before scaling spend.
-- Start diversifying off the primary platform early: email list, second platform, owned funnel — one platform must never be invisible systemic risk.
-- Track creator economics per funnel stage: RPM, CTR, CVR, AOV, refund rate.
-- Kill criteria: if N iterations of the strongest format produce reach but no intent (clicks/sales), change the niche or the offer, not just the editing.
-
-
-# Iteration loop
-
-BUILD
-→ MEASURE
-→ EXPLAIN
-→ DECIDE
-
-Possible decisions:
-
-CONTINUE
-CHANGE
-REMOVE
-PIVOT
-STOP
-
-
-# Anti-planning
-
-Do not create fake productivity.
-
-Avoid:
-
-- giant roadmaps
-- premature branding
-- premature automation
-- unnecessary architecture
-- 40-feature MVPs
-- vanity metrics
-
-
-# Output
-
-## Objective
-
-## Current uncertainty
-
-## Critical path
-
-## Phase 0 — validation
-
-## Phase 1 — MVP
-
-## Phase 2 — first users
-
-## Phase 3 — iteration
-
-## Phase 4 — scale conditions
-
-## Metrics
-
-## Kill criteria
-
-## Next action
+Present the objective, meaningful assumptions, critical path, milestones with acceptance evidence, open dependencies, and the next executable action. Include calendar dates or stop conditions where agreed or decision-useful; avoid unnecessary phases and decorative metrics. If asked to implement as well, continue through the authorized scope using the spec-to-code part.

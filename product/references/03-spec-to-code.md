@@ -1,221 +1,66 @@
-# Part 3 — Spec to Code (interview, SPEC, tickets, implement)
+# Spec to code — requirements into verified behavior
 
-Part of product. Works standalone.
+Use the existing conversation, artifacts, repository guidance, code, and tests to choose where to start. Preserve approved decisions and the user's requested scope. Stages are tools, not mandatory gates.
 
-
-# Spec to Code
-
-Four stages, one skill:
-
-```
-INTERVIEW → SPEC → TICKETS → IMPLEMENT
-```
-
-Each stage produces an artifact the next stage consumes. Never skip ahead:
-code written from a vague understanding is the most expensive kind of code.
-
-## Stage detection
-
-Enter at the stage matching what already exists:
-
-| Already have | Start at |
+| Current state | Next useful action |
 |---|---|
-| Vague idea or request | Stage 1 — Interview |
-| Approved requirements, Interview result, evaluate BUILD verdict | Stage 2 — Spec |
-| Approved spec | Stage 3 — Tickets |
-| Approved ticket | Stage 4 — Implement |
+| Clear bounded coding request | Brief acceptance criteria, inspect affected code, implement |
+| Important behavior unclear | Resolve the material uncertainty; continue independent inspection |
+| Requirements established | Write or update a proportionate spec if useful |
+| Substantial approved scope | Order testable slices by dependency and implement authorized slices |
+| Existing spec/tickets | Validate against current code and implement the requested scope |
 
-## Proportionality rule
+## Clarification without ceremony
 
-Match ceremony to size. Two paths:
+Ask only questions whose answers materially change behavior, safety, or scope and cannot be inferred reliably. Bundle closely related blockers; do not force a one-question-per-message interview or an arbitrary quota. Use reasonable low-risk assumptions and state them. Continue useful independent investigation while awaiting a necessary answer.
 
-- **Express path** — small bounded change (obvious behavior, ~1-2 files):
-  at most 2-3 clarifying questions, a 5-10 line mini-spec, 1-3 tickets,
-  then implement. Same stages, minimal weight.
-- **Full path** — everything else: complete each stage fully.
+Prioritize outcome, user flow, inputs/outputs, exclusions, constraints, and unacceptable failure cases. Existing decisions are settled unless current evidence exposes a conflict. Do not invent integrations, screens, retention rules, security promises, budgets, or deadlines.
 
-If unsure which path, ask once: "Is this a quick change or a full feature?"
+For a small clear fix, a sentence describing expected behavior and a focused verification plan can be the full spec. Do not create SPEC.md and TICKETS.md merely to satisfy this skill.
 
-## Stage 1 — Interview
+## Durable specification for substantial work
 
-Turn an unclear request into shared understanding without exhausting the user.
+Follow the repository's existing conventions and documents. Create a new spec only when needed; do not overwrite a user-maintained root file. Useful sections include:
 
-- Ask **one question per message**. Wait for the answer before the next.
-- Start with the uncertainty that most changes the outcome.
-- Treat facts already stated as settled. Do not re-ask them.
-- Prefer concrete wording and brief examples over abstract jargon.
-- Make a low-risk assumption only when cheap; state it and invite correction.
-- Do not write spec, tickets, or code while interviewing.
+- Purpose and users.
+- Included and excluded behavior.
+- Main flow, input/output contract, state transitions, and errors.
+- Data, integrations, permissions, and relevant nonfunctional constraints.
+- UX/content and accessibility expectations where applicable.
+- Observable acceptance criteria.
+- Confirmed decisions, assumptions, open questions, risks, and readiness.
 
-Question priority order:
+State observable behavior rather than implementation guesses. For example: "Submitting the same request twice creates one record and returns its identifier" is testable; "robust architecture" is not. Keep required acceptance behavior distinct from optional implementation choices.
 
-1. What outcome should exist when this is done?
-2. Who uses it and what problem does it solves for them?
-3. What is in scope and explicitly out of scope?
-4. What inputs, integrations, data, platforms, or technical constraints matter?
-5. What makes the result successful, and what failures are unacceptable?
-6. What examples, references, deadlines, budget, or compliance constraints apply?
+## Testable work slices
 
-**Timebox:** after 5-7 questions, stop and propose proceeding on stated
-assumptions. A perfect interview is not the goal — a testable understanding is.
+For multi-step work, organize slices by dependencies and user-visible outcomes. A useful ticket has an ID, goal, scope, dependencies, acceptance criteria, verification, and relevant implementation constraints. Include migration, rollback, observability, security, or docs only when the behavior needs them.
 
-Finish only when you can state, without inventing material details:
-desired outcome and audience; main user flow or behavior; scope boundaries
-and constraints; a workable success criterion; deferred assumptions.
+Do not force a fixed ticket count, one PR per ticket, a one-session duration, or repeated discovery when shared spec context already resolves it. Keep the smallest usable milestone visible. Mark genuine blockers without making deferrable decisions halt unrelated work.
 
-Output a compact **Interview result** with those five items, each marked
-`confirmed` or `assumption`.
+## Implementation loop
 
-## Stage 2 — Spec
+1. Inspect current branch/status, applicable repository guidance, affected behavior and tests. Preserve unrelated uncommitted work and repository conventions.
+2. Identify the smallest coherent change and how it will be verified. For new behavior or a regression, add a meaningful test when appropriate; reversible cosmetic changes may need visual inspection instead.
+3. Implement within the authorized scope. Reuse existing primitives and error handling; avoid speculative abstractions, unsolicited telemetry, and unrelated cleanup.
+4. Run proportionate checks that exercise the behavior and relevant failure paths. Type checking cannot prove a build, browser flow, deployment, or provider delivery. Distinguish configuration from live operation.
+5. Review the actual diff, boundary cases, acceptance evidence, and data/security implications relevant to the change. Fix identified defects and rerun affected checks; do not loop through unchanged broad suites without reason.
+6. Update existing task state when it is used. Continue to the next authorized dependency-ready slice until the user's scope is complete or a real blocker prevents progress.
 
-Create a clear, testable definition of what to build.
+Use actual available tools. If repository or runtime access is unavailable, prepare the most concrete patch or artifact possible and clearly state unexecuted verification. Do not claim a test, review, commit, build, or deploy occurred without evidence.
 
-- Source of truth: the conversation plus the Interview result.
-- One or two missing details → ask one targeted question at a time.
-- Deferrable detail → an explicit open question, not a blocker.
-- Never invent integrations, screens, data retention, security promises,
-  or business rules.
+## Authorization and handoffs
 
-Structure (omit sections that truly do not apply):
+Respect explicit instructions such as "plan first, wait for approval, then implement." If implementation is already authorized, do not ask again at the spec-to-ticket transition, after every ticket, or before the first implementation merely because a plan was produced. "Do it all" covers the agreed scope, not arbitrary new features or external actions.
 
-```markdown
-# [Feature or product name]
+Creating a plan or evaluating an idea alone does not authorize coding, deployment, spending, contacting people, deleting data, committing, or publishing. Follow the user's actual authorization and environment permissions for those actions. Prepare a concrete reviewable result before requesting any final permission that is genuinely needed.
 
-## Purpose
-## Users and problem
-## Scope
-### Included
-### Excluded
-## User flows and behavior
-## Functional requirements
-## Non-functional requirements
-## Data, integrations, and permissions
-## UX/content requirements
-## Acceptance criteria
-## Risks, assumptions, and open questions
-```
+## Implementation agents
 
-Quality bar:
+Use agents for independent components with explicit disjoint file ownership, a bounded technical investigation, or an independent defect review. Define interface contracts and dependencies before concurrent implementation. Agents return changed files, behavior, checks actually run, failures, and unresolved questions.
 
-- Requirements phrased as observable behavior, not implementation guesses.
-- Every acceptance criterion has a pass/fail outcome.
-- Confirmed facts separated from assumptions and open questions.
-- Proportionate: a simple feature does not get enterprise architecture.
-- Privacy, security, accessibility, performance called out only when relevant.
+The parent owns shared contracts, migrations, integration, review, and end-to-end acceptance. Do not assign simultaneous writes to shared specs or the same source files. Rebase or merge according to repository conventions and inspect the integrated result; several passing component tests do not establish integration success. For a small coupled change use sequential work.
 
-Persist the spec to `SPEC.md` in the project root so later sessions
-and other agents can resume without losing context.
+## Completion
 
-End with a `Readiness` line: `ready for tickets`, `needs decisions`,
-or `needs research`, with the reason.
-
-## Stage 3 — Tickets
-
-Turn the spec into executable slices of work, not a vague checklist.
-
-Principles:
-
-- Each ticket produces a reviewable outcome within one focused session.
-- **One ticket = one PR (or one commit group).** Do not batch unrelated tickets into a single change.
-- Order by dependency; reduce uncertainty early.
-- No "set up everything" tickets. Prefer vertical, testable slices.
-- Tests, migrations, rollback, observability, docs, security — include only
-  where relevant.
-- Do not assume a framework, repo structure, or deployment the spec
-  does not establish.
-
-Exact ticket format:
-
-```markdown
-## [ID] [Short imperative title]
-**Goal:**
-**Why now / dependency:**
-**Scope:**
-**Implementation notes:**
-**Acceptance criteria:**
-**Verification:**
-**Out of scope:**
-**Estimated session:** one focused session
-```
-
-Plan overview first: dependency order (`T1 → T2 → …`), the smallest usable
-milestone, and risks or decisions blocking any ticket.
-
-A ticket is ready only if Stage 4 could start from it alone without reopening
-product discovery. If impossible, surface the missing decision explicitly.
-
-Persist to `TICKETS.md` (with a `- [ ]` checkbox per ticket for progress).
-
-## Stage 4 — Implement
-
-Deliver one ticket safely and leave clear evidence of what changed.
-
-Start conditions:
-
-- One approved ticket or a clearly bounded coding request.
-- Ticket missing goal/acceptance/scope → ask one question or return to Stage 3.
-- Read the relevant code, repo guidance, and existing tests before editing.
-- Inspect uncommitted changes; preserve work outside this ticket.
-
-Delivery loop:
-
-1. Restate the ticket goal and a concise implementation plan.
-2. Identify the smallest affected surface; avoid unrelated cleanup.
-3. Implement with maintainable, idiomatic code.
-4. Add or update focused automated tests when feasible.
-5. Run the relevant checks. If a check cannot run, report the exact reason
-   and the next safe check.
-6. Review the diff against acceptance criteria, failure paths,
-   security/privacy implications, regressions.
-7. Commit only when repo access exists AND the user authorized committing;
-   focused conventional message unless the project states a convention.
-
-Boundaries:
-
-- Never claim a test, review, build, or commit happened unless it did.
-- Do not broaden the ticket or overwrite unrelated user changes.
-- Do not expose secrets, bypass security controls, or add telemetry
-  without explicit scope.
-- No repo access → provide a minimal patch and exact verification steps
-  instead of pretending to execute.
-
-Completion report:
-
-```markdown
-## Implemented
-- [what changed]
-
-## Verification
-- [command/check]: [result]
-
-## Review notes
-- [risk, trade-off, or "none found"]
-
-## Commit
-- [hash and message, or why no commit was made]
-
-## Next
-- [next ticket or remaining blocker]
-```
-
-After reporting, tick the ticket in `TICKETS.md`.
-
-## Handoffs between stages
-
-Default — confirm each transition:
-
-- after Stage 1: `Ready for the spec — proceed?`
-- after Stage 2: `Spec ready — split into tickets?`
-- after Stage 3: name the next executable ticket — `Start implementing [ID]?`
-- after Stage 4: propose the next ticket; never start it without instruction.
-
-**Flow mode** — on explicit request (`do it all at once`, `/spec-to-code full`),
-run Stages 1-3 without stopping, then pause before the first implementation.
-
-## Integration with the rest of the library
-
-- `evaluate` part verdict **BUILD** → enter at Stage 2; its MVP definition and
-  experiments are the spec's purpose section.
-- `plan` part output → its phases map to ticket batches.
-- `code-quality` skill guidelines applies inside Stage 4:
-  surgical changes, no overengineering.
+Report what changed and why, the meaningful checks and results, and material limitations or remaining blockers. Include a commit or deployment only if it occurred and is useful to the user. Avoid templated empty sections and do not offer to continue work that is already authorized and incomplete.

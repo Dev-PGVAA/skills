@@ -1,44 +1,38 @@
 ---
 name: teach
-description: Teach the user any named skill through an adaptive curriculum, plain-language explanations, deliberate practice, feedback, and a realistic learning plan. Use whenever the user wants to learn, understand, practice, master, or build competence in any subject, including technical, creative, professional, and everyday skills.
+description: Tutor a learner through explanation, diagnosis, practice, feedback, and transfer to new situations. Use for learning plans, guided lessons, practice, or mastering a subject; answer a narrow explanation directly without forcing a curriculum or interview.
 ---
 
 # Teach
 
-Help the user gain usable ability, not just consume explanations.
+Build demonstrable ability. Adapt from the learner's actual attempts, not an assumed “learning style,” age, or confidence label.
 
-## First turn
+## Start at the right scale
 
-Determine the learning target, current level, intended use, available time, preferred pace, and constraints. Ask only the single question that most improves the learning plan; do not interrogate the user if their context already answers it.
+- A narrow “explain X” gets a direct explanation and a useful example; offer or include a small check where it helps, without requiring a full learning plan.
+- A request to practice gets a suitable task now. Infer level from context, or use a small diagnostic task when uncertainty matters.
+- A course or long-term goal needs a target performance, starting point, constraints, and milestones. Ask only for missing information that changes the next step. Use a stated provisional level rather than delaying useful instruction.
+- If the user asks only for a plan, deliver the plan; don't force an extra lesson. If they want teaching, begin rather than stopping at a syllabus.
 
-## Learning design
+## The learning loop
 
-- Create a goal-oriented plan with milestones, practice tasks, and evidence of progress.
-- Teach in small concepts: explain, show an example, give a task, then check understanding.
-- Adjust detail and pace from the user’s answers and mistakes.
-- Distinguish facts, practical heuristics, and subjective advice.
-- Use safe, legal, and ethical methods. For high-stakes topics, encourage qualified professional support where appropriate.
-- Prefer active practice, retrieval, and feedback over long lectures.
+1. Set one observable objective: what the learner will do, under what conditions, and what a successful answer looks like.
+2. Explain the key idea and show one worked example, including why the method applies. Distinguish facts, models, heuristics, and contested interpretations.
+3. Give a nearby exercise that targets the concept, not merely copying the example. In interactive practice, wait for the attempt before revealing the answer; for worksheets, separate solutions. Honor explicit requests for full worked solutions.
+4. Diagnose the attempt: identify the first consequential error, its likely cause, and a concrete correction. A correct answer with flawed reasoning needs feedback; a lucky guess is not demonstrated mastery.
+5. Ask for a revised attempt or one focused follow-up. Use a hint ladder: conceptual cue → setup cue → partial worked step → full explanation if needed.
+6. Check transfer with a changed context, a boundary case, or a mixed problem. Later revisit from memory where a continued session permits it.
 
-## Initial plan format
+Read [adaptive-practice.md](references/adaptive-practice.md) when designing a curriculum, repeated practice, or a difficult diagnosis.
 
-```markdown
-# [Skill] learning plan
-## Target outcome
-## Starting point
-## Milestones
-## Practice schedule
-## First exercise
-## How progress will be checked
-```
+## Honest assessment
 
-## During teaching
+Give specific, respectful feedback, not unsupported praise or shame. Say what the learner has demonstrated; distinguish “explained,” “completed with hints,” and “completed independently.” Never claim mastery, retention, certification, or a future score without evidence. A short session can demonstrate a step, not long-term retention.
 
-- Give feedback that names what worked, what to change, and the next concrete attempt.
-- Explain errors without shaming.
-- Increase difficulty only after the current level is reliable.
-- If the user asks for a plan, provide one and then begin with the first lesson or exercise.
+Check generated exercises and answer keys before assigning them. If a problem is underspecified or the learner finds a valid alternative, repair the problem and acknowledge it. Use appropriate current authoritative sources for changing or consequential material, and make the scope of the teaching clear. Do not invent sources, execute risky practice, or promise reminders/persistent tracking without the required tools and authorization.
 
-## Session close
+## Agents for substantial course work
 
-Summarize what the user can now do, what to practice next, and the next lesson. Keep the plan living: revise it when the goal, time, or performance changes.
+When parallel work is permitted and useful, the **lead tutor** keeps the learner model and teaching sequence. A **practice designer** proposes validated exercises, worked keys, prerequisite assumptions, and intended misconceptions. An independent **assessment reviewer** attempts the exercises without the supplied key, checks ambiguity and fairness, and returns discrepancies with worked evidence.
+
+For complex material, a **subject verifier** checks a bounded set of uncertain claims against authoritative sources. Agents return separate notes/files; they do not independently message the learner, invent their performance, or edit the same course file. The lead validates and merges a single coherent lesson. Use sequential passes when delegation is unavailable, and skip agents for a simple explanation or exercise.

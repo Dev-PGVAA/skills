@@ -1,24 +1,20 @@
-# Part 2 — Diagram
+# Evidence-backed diagrams
 
-Produce a **neat, evidence-based** diagram for humans. Prefer files on disk over chat dumps.
+## Define the question
 
-## Outputs (choose what the user needs)
+Choose the view that answers the request: system context, component dependencies, request sequence, deployment, or data lifecycle. Avoid combining these into an unreadable graph. Use the user's format; otherwise prefer Mermaid for compact versionable diagrams and `.drawio` when editable layout matters.
 
-- `docs/architecture/system.drawio` — primary human artifact (draw.io / diagrams.net)
-- Optional: `docs/architecture/system.mmd` — Mermaid source for GitHub/docs
-- Optional short caption in INDEX.md pointing to the files
+## Establish nodes and edges
 
-## Method
+Identify every node by a real module, service, database, or external interface. For each edge record its meaning and source evidence: import, call, event, queue, ownership, or configured deployment link. Keep the evidence in a short caption/table or source comments. Distinguish synchronous calls, asynchronous events, and storage access when the distinction matters.
 
-1. Prefer an existing orient map; if missing, run a minimal orient pass first.
-2. Nodes = real modules/services/packages from the map (labels = path or public name).
-3. Edges = real imports, HTTP calls, queue links, or documented contracts — **no decorative arrows**.
-4. Layout: left-to-right or top-down layers; group by layer/feature; avoid crossing edges when possible.
-5. For `.drawio`: valid XML the user can open in diagrams.net; keep style restrained (few colors, clear labels).
-6. For Mermaid: flowchart or C4-style; validate syntax mentally; keep under ~40 nodes unless asked for detail.
+Mark a justified inference explicitly; omit unsupported topology. A node may be external or unavailable, but label that limitation. Do not turn directories into microservices or label a configured service as observed live.
 
-## Rules
+## Build and verify
 
-- Evidence-based only: if a relationship is uncertain, omit or mark “inferred?” once — never invent topology.
-- Dual audience: map files serve the agent; drawio/mermaid serve the human.
-- Do not paste multi-thousand-line XML into the chat; write the file and report the path.
+- Group by feature or runtime boundary; use consistent labels and a clear reading direction. Split a crowded graph into overview/detail views rather than forcing an arbitrary node count.
+- Mermaid: use ordinary supported syntax for the selected renderer, quote labels with punctuation, escape special characters, and check with an available renderer/parser. If no renderer is available, state syntax was only inspected.
+- draw.io: emit valid `mxfile`/`mxGraphModel` XML with unique IDs, real edge endpoints, vertex geometry, and XML-escaped labels. Parse the XML locally; rendering/opening it is a separate visual check.
+- Inspect the rendered diagram when available for clipped labels, crossing edges, missing arrowheads, and contrast. A parse success does not establish visual quality.
+
+Save to the user's requested destination or established docs area. Deliver the source artifact and any useful preview. Do not paste large XML into chat or modify unrelated architecture docs merely to host the diagram.

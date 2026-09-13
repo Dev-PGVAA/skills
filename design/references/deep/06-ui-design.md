@@ -1,36 +1,12 @@
-# UI Design — Type Roles and Components
+# UI type roles and component reference
 
-Practices from Material Design 3 (CC BY 4.0), IBM Carbon, Apple HIG. Reference numbers, not legal law — map them to your tokens.
+Attribution retained from the source kit: Material Design 3 (CC BY 4.0), IBM Carbon, and Apple HIG practices. These reference scales are examples, not current-version guarantees or universal size requirements. Check current official platform guidance when exact values matter.
 
-## Table of contents
-- Type roles (concept)
-- Reference scales: Material 3 / Apple
-- Assigning roles in a product
-- Actions and buttons
-- States
-- Touch targets and hit areas
-- Icons
-- Radius, elevation, borders
-- Platform conventions
-- Decision rules
+## Roles and platform examples
 
-## Type roles (concept)
+Map actual text slots to meaningful roles such as display, headline, title, body, and label. Reuse the existing system. Reading, dense operational, native, and presentation surfaces have different needs; dynamic text and actual legibility matter more than matching a copied table.
 
-Never size text per component ad hoc. Define named **roles**, then every text slot uses a role:
-
-```text
-display   marketing hero numbers (rare, 1–2 per product)
-headline  page/section titles
-title     card headers, list group titles
-body      reading text and control labels
-label     buttons, chips, tabs, table headers, captions (often 500 weight)
-```
-
-Material 3 also fixes weight/tracking per role; Carbon splits **productive** (UI/data, 14px body, tight leading) vs **expressive** (reading/marketing, larger, looser) — adopt this split per surface.
-
-## Reference scales
-
-**Material 3 (px, size/line-height, weight):**
+**Material 3 illustrative type scale (size/line-height, weight; map to the target platform units):**
 
 | Role | Size/LH | Weight |
 |---|---|---|
@@ -52,84 +28,28 @@ Material 3 also fixes weight/tracking per role; Carbon splits **productive** (UI
 
 **Apple (iOS, pt):** Large Title 34, Title 1/2/3 = 28/22/20, Headline 17 semibold, Body 17, Callout 16, Subheadline 15, Footnote 13, Caption 12/11. (macOS body: 13.)
 
-Typical web product subset (mirrors part 2's token roles): display 48, h1 40, h2 32, h3 24, title 20, body 16, body-sm 14, caption 12 — exactly one definition each.
+Typical web product subset (mirrors part 2's token roles): display 48, h1 40, h2 32, h3 24, title 20, body 16, body-sm 14, caption 12 — adapt the subset to actual roles.
 
-## Assigning roles in a product
+## Actions and states
 
-- Map every text slot to a role token before writing CSS: `title-medium`, `body-large`…; components consume tokens only.
-- Reading surfaces (articles, onboarding text): body 16–18px, LH 1.5+ (expressive mode).
-- Dense surfaces (tables, consoles, settings): body 13–14px, LH 1.4 (productive mode) — never below 12px.
-- Buttons/labels: label role (14/500 or 12/500), sentence case, no all-caps except short system labels.
-- Number-heavy UI: tabular numerics everywhere data aligns (see 03).
+Establish priority within each decision region; separate panels can have different primary actions. Destructive treatment, undo, or confirmation should match the consequence. Preserve authorized workflows instead of adding redundant prompts.
 
-## Actions and buttons
+Use clear, consistent labels without an arbitrary word limit. Design relevant default, focus, hover, pressed, selected, disabled, loading, empty, success, and error states. Not every component needs every state. Prefer native semantics and platform patterns.
 
-- Per view: exactly one primary (filled/accent) action; secondary = tonal/outline; tertiary = text button. Emergency aside, never two filled buttons in the same region.
-- Destructive actions: danger color on the button or its label, confirmation for irreversible ones; place destructive away from primary (not adjacent).
-- Button label = verb + object ("Save changes"), ≤3 words; same action keeps the same label everywhere.
-- Button height: comfortable 40–48px (touch), compact ≥32px (pointer-only, e.g., toolbars); horizontal padding scales with label.
+Disabled behavior depends on the element: native disabled controls and aria-disabled custom controls require different handling. Do not disable pointer events indiscriminately or lose keyboard explanations. Preserve input on errors and make asynchronous updates understandable without stealing focus.
 
-## States
+## Targets and icons
 
-Design all states up front for every interactive component: default, hover, active/pressed, focus-visible, selected, disabled, loading, error. Missing states read as broken.
+Apple points, Android dp, and web CSS pixels are different units. Platform guidance commonly favors generous touch targets; web WCAG 2.2 AA includes a 24 CSS px sizing rule with exceptions. There is no universal eight-pixel gap requirement. Use [Accessibility reference](07-accessibility.md) for precise applicability.
 
-- Hover: subtle (bg lightness ±1 step or underline for links) — gate hover effects behind `@media (hover: hover)`.
-- Disabled: reduced contrast (≥3:1 where feasible), no pointer events, keep informative.
-- Focus: always visible, never `outline: none` without replacement (see 07).
-- Selected/active nav item: ≥2 cues (weight + color, or filled indicator), not color alone.
+Icon-only controls need accessible names; tooltips alone are insufficient. Visible labels help unfamiliar actions, while familiar compact controls can work with reliable naming and affordance. Keep icon style coherent, allowing outlined/filled variants when they convey state.
 
-## Touch targets and hit areas
+## Shape, elevation, and platform fit
 
-- Minimum target: 44×44pt (Apple) / 48dp (Material); WCAG 2.2 floor 24×24px CSS.
-- Visual may be smaller than target: expand hit area with padding/pseudo-element (links in prose, icon buttons).
-- Gap between adjacent targets ≥8px to prevent mis-taps.
+Reuse shape and elevation roles. A few radius/shadow levels often suffice, but border plus shadow is legitimate when boundary and elevation both matter. Optical alignment can differ from geometric alignment.
 
-## Icons
+Native interfaces should respect platform navigation, typography, focus, and scaling expectations. Web interfaces can reuse a framework or product system. Do not turn a neutral operational UI into an expressive landing page solely for novelty.
 
-- One icon family per product (same stroke weight, corner style, grid). Don't mix outline and filled sets.
-- Sizes from scale: 16, 20, 24 (default), 32; align optically to text (cap-height centering).
-- Icon-only controls require an accessible name (tooltip + aria-label).
-- Icons support labels, they don't replace them in navigation and actions.
+## Verify
 
-## Radius, elevation, borders
-
-- Radius scale of 3–4 steps (e.g., 4 controls / 8 cards / 16 large surfaces / full pill for tags) — consistent per component class; not one radius everywhere, not arbitrary values.
-- Elevation: 2–3 levels max (sticky header, dropdown, modal). Prefer surface tint or border over shadow (Carbon's flat approach); shadows soft and low-opacity on light themes.
-- Never combine hairline border + large radius + big diffuse shadow on the same element — pick one separation mechanism (see 04).
-- 1px borders at 1×, drawn inside (box-sizing), `hairline` only for deliberate delicate dividers.
-
-## Platform conventions
-
-| Context | Follow |
-|---|---|
-| Web app/site | Own token system; this skill's rules |
-| iOS | HIG: San Francisco (system), Dynamic Type support, 44pt targets, native nav patterns |
-| Android | Material 3: roles above, 48dp targets, ripple feedback |
-| Desktop apps | Platform font/UI kit; denser spacing acceptable |
-
-On native platforms, users expect native patterns — diverge only where the product's identity demands it and the divergence is consistent.
-
-## Decision rules
-
-```text
-IF a component defines a font size directly
-THEN replace with a type role token.
-
-IF a screen has two filled buttons
-THEN demote one to secondary/tertiary.
-
-IF an interactive element has only :hover styling
-THEN add focus-visible, active, disabled states.
-
-IF an icon button is 24×24 visual
-THEN expand the hit area to ≥44×44.
-
-IF every card has a different radius
-THEN fix a radius scale and map component classes to steps.
-
-IF body text in a data table is 16px+ and wraps
-THEN switch the surface to productive mode (13–14px, tabular figures) or restructure.
-
-IF focus ring was removed for aesthetics
-THEN restore a visible custom focus style (never ship invisible focus).
-```
+Inspect actual strings, hit areas, keyboard operation, focus, state changes, responsive layout, and relevant assistive-technology output. Source inspection, a screenshot, and a successful component build establish different evidence; report them separately.

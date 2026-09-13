@@ -1,10 +1,11 @@
-# Part 6 — Motion (animation craft)
+# Motion
 
-Part of design. Works standalone.
+Use motion to explain a state change, spatial relationship, progress, or feedback. Frequency, user control, and latency determine whether it helps. Keyboard interaction can have motion when it preserves focus and responsiveness; there is no universal prohibition.
 
-- Frequency test first: used 100×/day (command palettes, shortcuts) = no animation; tens/day = minimal; rare = may delight. Never animate keyboard-initiated actions.
-- Every animation has a stated purpose (spatial, state, feedback, explanation) — "looks cool" is not one.
-- Easing: entering = ease-out; moving on screen = ease-in-out; hover/color = ease; constant = linear. Durations: press 100–160ms, tooltips 125–200ms, dropdowns 150–250ms, modals 200–500ms; UI stays <300ms.
-- Entrances start from scale 0.95 + opacity 0 — never scale(0). Press feedback scale 0.97.
-- Animate transform/opacity only. Stagger 30–80ms max. Popovers scale from their trigger; modals stay centered.
-- Respect `prefers-reduced-motion`; nothing flashes >3Hz.
+Existing motion conventions win unless they cause a problem. As starting points, brief control feedback may take roughly 100–200ms and overlays 150–300ms. Easing should fit direction and continuity; avoid applying the same scale/opacity entrance to every component.
+
+Prefer efficient properties such as transform and opacity, but choose the property needed by the effect and measure performance where material. Do not animate decoration merely to appear polished or delay essential actions until animation ends.
+
+Respect reduced-motion preferences with a low-motion or static equivalent; do not assume opacity transitions are always harmless. Make applicable moving/auto-updating content pausable and avoid flashing. Precise WCAG applicability is in [Accessibility detail](deep/07-accessibility.md).
+
+Verify interruption, rapid repeat actions, keyboard use, and reduced-motion behavior on the actual component. A static screenshot cannot establish motion quality or performance.

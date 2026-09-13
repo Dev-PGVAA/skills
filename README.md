@@ -1,59 +1,51 @@
-# Komplekt (compact improved)
+# Komplekt — revised skills for Codex
 
-**15 agent skills.** No bloat. Progressive disclosure keeps token cost near the previous set.
+16 personal skills, revised from [Dev-PGVAA/skills](https://github.com/Dev-PGVAA/skills), source revision `8256d40f4fbe0242bea7599861d81e943105ee6e` (2026-09-12).
 
-All instructional text is **English** (better model following), except `russian-master` (RU by design).
+## What changed
 
-## Install
+Each skill has a focused entrypoint, concrete completion checks, selective references, and task-specific delegation guidance. Subagents are used for independent work when available and useful; the parent owns integration, source checking, and final output. Small tasks stay small. No model override, mandatory agent count, hidden background process, or invented tool is required.
 
-Copy each skill folder into `~/.agents/skills/<name>/` (Claude Code, Codex, Cursor, OpenCode, Grok, …).
+The revision corrects incompatible planning hooks, duplicated planning resources, prompt/output drift, forced approvals and report padding, and identified domain and helper-script defects. The accompanying audit distinguishes structural checks, isolated execution tests, and behavioral examples from untested real-world use.
 
-## Contents
+## Skills
 
-| Skill | Role |
+| Skill | Purpose |
 |---|---|
-| design | Full visual stack, 10 parts + deep layer (anti-slop 2026, WCAG 2.2, design-to-code) |
-| product | Idea → plan → spec → code |
-| deep-research | Evidence A–E + falsification + pre-research contract |
-| research-report | 30+ page report with provenance gate |
-| summary | Compress long text |
-| humanizer | Natural prose and UI microcopy |
-| teach | Learning plan |
-| code-quality | Minimal clean code + TDD bias + defect-first / PR-oriented review |
-| context7-cli | Current library docs |
-| security | Agent audit (OWASP LLM 2026 + ASI01–ASI10 checklists) + secrets |
-| planning-with-files | On-disk working memory (tie to product / research) |
-| russian-master | Russian norms and EGE |
-| skill-finder | Library routing |
-| graph-surgeon | Note graph hygiene |
-| **codebase-map** | Living repo orientation + evidence-based draw.io/Mermaid |
+| code-quality | Focused code changes and evidence-based diff review |
+| codebase-map | Repository orientation and verified architecture diagrams |
+| context7-cli | Version-aware library documentation and explicit Context7 setup |
+| deep-research | Traceable evidence, counter-evidence, and uncertainty |
+| design | Visual direction, components, accessible UX, and visual QA |
+| graph-surgeon | Scoped note-link analysis and precise repairs |
+| humanizer | Natural writing with facts and voice preserved |
+| planning-with-files | Isolated, resumable task state and handoffs |
+| product | Evaluate, plan, specify, and implement at the requested stage |
+| prompt-enhancer | Improve a prompt without silently executing it |
+| research-report | Analytical reports at the requested depth and length |
+| russian-master | Russian norms, exam tasks, and year-aware source checks |
+| security | AI-system audit and scoped SOPS/age secret workflows |
+| skill-finder | Current skill inventory and overlap resolution |
+| summary | Faithful condensation with attribution and uncertainty |
+| teach | Diagnosis, explanation, practice, feedback, and transfer |
 
-## Pipelines
+## Local installation
 
+Install the 16 directories containing a top-level `SKILL.md`, including their references, scripts, assets, and `agents/openai.yaml`, into one personal discovery root. Current official Codex documentation lists `~/.agents/skills/` for user skills. Older installations may also contain personal copies under `~/.codex/skills/`; inspect both and back up conflicting copies before replacement. Do not install the root `scripts/` or `tests/` as skills, and do not delete `.system` or plugin caches.
+
+Codex does not merge same-name skills. Keep one active copy per personal skill rather than mirroring directories into both roots. Changes should become available on the next turn; restart Codex if its selector remains stale. See [official skill documentation](https://learn.chatgpt.com/docs/build-skills).
+
+Invoke a skill as `$code-quality`, `$product`, `$teach`, or another listed name, followed by the task. Normal automatic selection remains enabled. `agents/openai.yaml` supplies UI metadata; subagent workflows live in the skill instructions and use the host's available delegation tools.
+
+## Verification
+
+Use Python 3 with PyYAML in an isolated environment for the bundle validator:
+
+```text
+python scripts/validate_bundle.py
+python -m unittest discover -s tests -v
 ```
-product:     evaluate → plan → spec-to-code
-research:    deep-research → research-report
-security:    audit → secrets
-design:      direction → tokens → … → anti-slop → a11y → review
-code:        codebase-map/orient → code-quality (guidelines | review) → tests
-orientation: codebase-map/orient  (then diagram if human needs visual)
-```
 
-## Token discipline
+The validator checks metadata, linked local resources, and script syntax. Execution tests and behavioral evaluations are separate evidence. No global package installation or paid model API is needed for static validation. Security helper tests may need installed `sops` and `age`; check their individual test instructions and do not use production credentials.
 
-- Skills load **only when triggered**; SKILL.md stays short; details live in `references/`.
-- `codebase-map` writes disk files — agent reads INDEX + one section, not the whole repo every turn.
-- Do not install overlapping third-party “mega packs”; this set is intentionally closed.
-
-## MCP / freshness notes (not separate skills)
-
-- **NotebookLM / Gemini Notebook MCP** (if you already run it): use as grounded project memory — sources + cited answers. Pair with `deep-research` for open-web facts and NotebookLM for *your* docs/RFCs.
-- Prefer live search for pricing, APIs, laws, CVE, model cards (same as deep-research recency rules). Other models benefit when you force tool use + dated sources the same way.
-
-## Changelog focus (this build)
-
-- security: ASI01–ASI10 + Excessive Agency checklists
-- research-report: provenance gate + A–E linkage
-- code-quality: less-code / ~120 LOC soft limit / TDD / LLM anti-patterns / PR blast-radius
-- design: distributional convergence anti-slop, WCAG 2.2, design-to-code note
-- **new** codebase-map (orient + diagram) — replaces the need for several architecture-only skills
+The original planning shell/PowerShell hooks and active-plan/session-log recovery scripts were replaced with `planning-with-files/scripts/plan.py`. It uses an explicit task directory, preserves existing files, and checks recorded status only. No hooks or schedules are installed.

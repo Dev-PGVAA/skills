@@ -1,4 +1,4 @@
 interface:
   display_name: "Skill Finder"
-  short_description: "Skill inventory and dispatcher"
-  default_prompt: "List my skills or pick the right skill for this task"
+  short_description: "Choose skills and resolve overlapping workflows"
+  default_prompt: "Use $skill-finder for the task I describe, preserving its scope."

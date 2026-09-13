@@ -1,0 +1,4 @@
+interface:
+  display_name: "Codebase Map"
+  short_description: "Verified repository navigation and architecture maps"
+  default_prompt: "Use $codebase-map to locate the request flow and map its real dependencies."

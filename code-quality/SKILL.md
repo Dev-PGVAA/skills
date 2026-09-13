@@ -1,29 +1,26 @@
 ---
 name: code-quality
-description: >
-  Discipline for writing minimal, correct, clean code and reviewing changes, in two
-  invokable parts. Guidelines — surgical edits, prefer less code that works and reads
-  well, TDD when behaviour is new, ~120 lines soft limit per file with documented
-  exceptions, reject 2026 LLM anti-patterns (speculative abstractions, hallucinated
-  APIs, dead code). Review — defect-first P0–P3 findings on a diff or commit, blast
-  radius, test gaps, security-relevant issues. Invoke a part by name. Triggers include
-  code review, PR review, write code carefully, TDD, refactor, clean code, меньше кода,
-  ревью, проверь изменения.
-version: 1.1.0
-last_updated: 2026-08-29
+description: Write focused, verifiable code changes or perform a defect-first review of a diff, commit, or pull request. Use for implementation discipline, refactoring, and code review; choose review mode only when requested.
 ---
 
-# Code Quality — write carefully, review honestly
+# Code Quality
 
-Two parts, one concern: code a senior engineer would trust, without surplus.
+Make the requested behavior correct with a focused change; review defects using concrete evidence. Respect repository instructions, existing architecture, user edits, and the requested read/write scope.
 
-| Part | File | Invoke for |
-|---|---|---|
-| `guidelines` | `references/01-guidelines.md` | While writing or editing — minimal, working, clean |
-| `review` | `references/02-review.md` | Defect-first review of a change / PR-style |
+## Select the mode
 
-## How to invoke
+- **Implement / refactor:** read [guidelines](references/01-guidelines.md). Define observable acceptance criteria and use the repository's actual tooling.
+- **Review:** read [review](references/02-review.md). Remain read-only unless fixes are also requested. Confirm the comparison before drawing conclusions.
+- A small edit needs a small workflow. Do not create plans, abstractions, tests, or extra files solely to satisfy this skill.
 
-- User names a part or asks for review → load that part.
-- Writing code with no review asked → still apply `guidelines` silently.
-- Review findings use `[P1] title — path:line` format; `No findings.` is valid.
+## Useful delegation
+
+Use available subagents for independent work that materially reduces uncertainty. Skip delegation when context transfer costs more than the task; use the same roles sequentially if agents are unavailable.
+
+- **Implementation:** a contract scout reads callers, interfaces, and existing tests while the parent implements; a verifier exercises the changed behavior after a stable patch. Split implementation only across genuinely independent files, with one owner per file and the parent owning integration files.
+- **Review:** partition by risk, such as authorization/data handling and state/concurrency, or disjoint modules. Give every reviewer the same base/head and required user behavior. The parent traces cross-module paths, checks each proposed finding, removes duplicates, and assigns final severity.
+- A delegated task names the objective, allowed paths, read/write scope, assumptions, stop point, and evidence expected. Return changed files or `path:line` findings, an actual reproducer/test result, and unresolved questions. Do not recursively delegate without a useful bounded reason.
+
+## Completion
+
+Report behavior changed or actionable findings, checks actually run, and material limitations. “No findings” is valid; passing typecheck is not proof of runtime behavior or deployment.

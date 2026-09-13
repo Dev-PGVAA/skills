@@ -1,69 +1,34 @@
-# Visual Hierarchy
+# Visual hierarchy
 
-Adapted from OERT (CC BY-SA 2.5) and BCcampus (CC BY 4.0).
+Attribution retained from the source kit: adapted from OERT (CC BY-SA 2.5) and BCcampus (CC BY 4.0). These are contextual design heuristics.
 
-## Table of contents
-- What hierarchy is
-- Hierarchy cues, by strength
-- Rules of hierarchy
-- Scanning patterns
-- Decision rules
+Hierarchy is the intended order of attention and comprehension. It should follow real content importance, current user task, and reading direction. A few perceptible levels often suffice, but a complex document or tool may need more.
 
-## What hierarchy is
+## Available cues
 
-Hierarchy is the **intended order of consumption**: what the viewer sees first, second, third. It is created only by perceptible differences between elements. If a design "feels flat" or "busy", hierarchy is missing or ambiguous — fix hierarchy before adding decoration.
+| Cue | Use | Limitation |
+|---|---|---|
+| Size | Distinguish display, heading, body, and utility roles | Consumes space; an oversized hero can bury the task |
+| Weight | Add emphasis without much reflow | Too many weights flatten emphasis |
+| Position | Exploit reading order and task sequence | LTR top-left conventions are not universal |
+| Contrast/color | Surface active controls and key information | Meaning must not depend on color alone |
+| Space | Isolate priorities and group related elements | Excess space can harm dense workflows |
+| Imagery | Show product, evidence, or subject directly | Strong pictures can overpower essential instructions |
 
-Define at most three ranks per view: primary (the one thing), secondary (what's next), tertiary (everything else, deliberately quiet).
+Combine cues where necessary for clear priority, without a fixed two-channel quota. A bold title at body size may be clear; subtle color differences alone may not be.
 
-## Hierarchy cues, by strength
+## Document and interface structure
 
-Combine at least two channels for the primary level; one channel for lower levels:
+Heading levels encode document structure, not a convenient font size. Keep the outline coherent and styles consistent with recurring roles. Establish action priority within a decision region; separate panels may each have a primary action. Do not demote a necessary action merely because another filled button exists elsewhere on screen.
 
-1. **Size** — strongest, most expensive in space.
-2. **Weight** — cheap and precise (regular → medium → bold).
-3. **Position** — top-left of the composition (LTR reading) gets first attention.
-4. **Color/contrast** — accent color on neutral surroundings; high contrast = importance.
-5. **Whitespace isolation** — empty space around an element raises it.
-6. **Imagery** — faces and pictures outrank text; use knowingly.
-
-## Rules of hierarchy
-
-- One focal point per view. One primary action per screen; if two actions compete, demote one (secondary button style or reorder).
-- Same semantic importance ⇒ same visual treatment (same type token, same color). Different treatment must mean different meaning.
-- Hierarchy levels must be unmistakable: heading vs. body must differ in ≥2 channels (size + weight, size + spacing).
-- Never create hierarchy by tricking the reader (low-contrast "thin gray on white" text); de-emphasize, don't hide.
-- Heading levels encode document structure (h1 → h2 → h3, no skips); visual style follows semantics, not the reverse.
-- In long text, hierarchy = consistent heading rhythm + paragraph spacing + emphasis inside paragraphs used sparingly (bold ≤1 phrase per paragraph).
-- In UI, hierarchy = component weight: primary button (filled) > secondary (outline/tonal) > tertiary (text). Never two filled buttons side by side in one region.
+Emphasis inside prose helps scanning when it highlights real distinctions. There is no universal two-bold-phrases-per-screen limit. Preserve meaningful emphasis in dense comparisons and technical documents.
 
 ## Scanning patterns
 
-- Text-heavy pages: F-pattern — first lines of paragraphs and headings get read, body middles get skipped. Front-load headings and first sentences with meaning.
-- Sparse/visual layouts: Z-pattern — eye travels top-left → top-right → bottom-left → bottom-right. Put identity top-left, action bottom-right.
-- Cards/grids: scan in rows or columns consistently; never mix both orders in one grid.
-- Test: blur the screenshot (or squint) — you should still perceive the intended order of importance as blobs.
+F- and Z-patterns are useful hypotheses for some LTR text-heavy or sparse layouts. Content, familiarity, device, script, and the user's task can change scan behavior. Do not force identity top-left or action bottom-right solely to match a diagram.
 
-## Decision rules
+A blur or squint check can reveal dominant visual masses. It cannot prove reading order, accessibility, or task completion. Verify the actual content and keyboard/document order separately.
 
-```text
-IF the interface contains more than 3 heading levels
-THEN define an explicit type scale and map each level to a token.
+## Practical corrections
 
-IF two text elements have the same semantic importance
-THEN they share the same typography token (and vice versa).
-
-IF hierarchy relies only on color
-THEN add size, weight, spacing or another non-color cue.
-
-IF a layout feels cluttered
-THEN reduce competing type styles before adding decoration.
-
-IF two actions both look primary
-THEN demote one to secondary/tertiary styling.
-
-IF everything is emphasized
-THEN nothing is — pick the single element to keep loud.
-
-IF the blur test doesn't show the intended reading order
-THEN increase differences (size/weight/space), don't add new elements.
-```
+If everything appears equally important, reduce competing display roles and emphasize the current decision. If unrelated elements appear grouped, adjust spacing, labels, or boundaries. If priorities vanish without color, add another meaningful cue. If a layout is dense but usable, preserve that density rather than redesigning it as a marketing page.

@@ -1,29 +1,12 @@
-# Part 2 — Tokens (the system before anything is built)
+# Tokens — reusable roles
 
-Part of design. Works standalone. Define tokens first; components consume tokens only, never raw values.
+Inspect and reuse the existing system first. Introduce tokens only where reuse or theme consistency justifies them; a small isolated artifact does not need an enterprise token architecture.
 
-Exact tables: color ramps and semantic tokens — `references/deep/05-color.md`; extended spacing values (40, 80, 160) — `references/deep/04-layout-grid-spacing.md`.
+- **Type:** map actual roles (caption, label, body, title, display) to existing or a compact new scale. A ratio can guide a new scale; optical adjustments and fluid sizing may be appropriate. An illustrative web subset is 12, 14, 16, 20, 24, 32, 40, 48px—not a pure geometric sequence.
+- **Spacing:** a 4/8px base and values such as 2, 4, 8, 12, 16, 24, 32, 48, 64, 96 are useful starting points. Relational spacing should explain grouping; do not ban optical corrections or existing values.
+- **Color:** semantic roles such as background, surface, text, border, accent, danger, and focus make themes maintainable. A neutral ramp and restrained accents often suffice. Data visualization, brand palettes, and accessibility can require more hues; 60/30/10 is a composition heuristic, not a measured gate.
+- **Shape/elevation:** use a small coherent set by component purpose. Borders and shadows may work together where they communicate boundaries and elevation. Avoid decoration that hides hierarchy.
 
-## Type scale
+Check final contrast, theme variants, and component states. Dark mode needs deliberate token choices rather than mechanical inversion; pure black and system colors may be correct for the platform or brand.
 
-5–8 fixed steps from one ratio (1.2 dense, 1.25 default, 1.333 editorial). Example web scale on 16px: `12, 14, 16, 20, 24, 32, 40, 48` mapped to roles `caption, label, body, title, h3, h2, h1, display`. Adjacent steps ≥1.2× apart or differ in weight too. No one-off sizes ever.
-
-## Spacing scale
-
-4/8px base: `2, 4, 8, 12, 16, 24, 32, 48, 64, 96, 128` with semantic levels, each strictly larger than the last:
-
-```text
-within-component 4–12   <   between-related 12–24   <   between-groups 24–48   <   between-sections 48–128
-```
-
-Iron rule: space inside a group is always smaller than space between groups. Use 2–3 section-spacing levels, not one uniform gap everywhere.
-
-## Color tokens
-
-Layered: primitives (ramps) → semantic (`bg, surface, text-primary, text-secondary, border, accent, accent-hover, success, warning, danger, focus`) → component. Ramps built in OKLCH: neutral ramp (8–10 steps, one hue) + 1 primary + ≤2 accents + semantic set; ≤5 hues total; accent covers ≤10% of any view (60/30/10).
-
-Dark mode is rebuilt, not inverted: desaturated surfaces, lightened accents, elevation via lighter surfaces.
-
-## Shape and elevation
-
-Radius scale 3–4 steps (e.g., 4 controls / 8 cards / 16 surfaces / pill); shadows ≤3 levels, prefer border/surface-tint over shadow; never stack border + big radius + diffuse shadow on one element.
+More detail: [Color](deep/05-color.md), [Spacing](deep/04-layout-grid-spacing.md), and [Component roles](deep/06-ui-design.md).

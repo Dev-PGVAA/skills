@@ -1,4 +1,4 @@
 interface:
   display_name: "Prompt Enhancer"
-  short_description: "Turn rough requests into precise, executable prompts"
-  default_prompt: "Use $prompt-enhancer to improve this prompt while preserving my intent and answering in the language of our conversation."
+  short_description: "Clear prompts with preserved scope and intent"
+  default_prompt: "Use $prompt-enhancer for the task I describe, preserving its scope."

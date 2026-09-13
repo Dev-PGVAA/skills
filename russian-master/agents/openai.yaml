@@ -1,4 +1,4 @@
 interface:
   display_name: "Russian Master"
-  short_description: "Русский язык: нормы, ЕГЭ, сочинение"
-  default_prompt: "Проверь текст и объясни ошибки по нормам русского языка"
+  short_description: "Русский язык: нормы и точная проверка ЕГЭ"
+  default_prompt: "Используй $russian-master: проверь текст, объясни ошибки и отдели норму от стилистического выбора."

@@ -1,114 +1,36 @@
-# Documentation Commands
+# Documentation lookup
 
-Retrieves and queries up-to-date documentation and code examples from Context7 for any programming library or framework. Two-step workflow: resolve the library name to get its ID, then query docs using that ID.
+## Resolve the correct package and version
 
-If the user already provided a library ID in `/org/project` or `/org/project/version` format, pass it directly to `ctx7 docs`.
-
-## Step 1: Resolve a Library
-
-Resolves a package/product name to a Context7-compatible library ID and returns matching libraries.
+Inspect local manifests and lockfiles when answering a project question. Record the package name, installed version, runtime, and the API uncertainty. Resolve once with a focused query:
 
 ```bash
-ctx7 library react "How to clean up useEffect with async operations"
-ctx7 library nextjs "How to set up app router with middleware"
-ctx7 library prisma "How to define one-to-many relations with cascade delete"
+ctx7 library nextjs "app router request cookies" --json
 ```
 
-Always pass a `query` argument — it is required and directly affects result ranking. Use the user's intent to form the query, which helps disambiguate when multiple libraries share a similar name. Do not include any sensitive or confidential information such as API keys, passwords, credentials, personal data, or proprietary code in your query.
+The query is optional in current upstream CLI, but useful for disambiguation; installed help takes precedence. A library ID already provided by the user or verified in this session can be reused. Choose the actual publisher and product before considering snippet counts or scores. Those scores rank retrieval; they do not prove authority or compatibility.
 
-### Result fields
+Use a version listed by the resolver when it matches the requested version. Do not silently substitute “closest” or latest documentation across a breaking version. If no exact version is indexed, retrieve the relevant official versioned docs or local types/source and explain the gap.
 
-Each result includes:
-
-- **Library ID** — Context7-compatible identifier (format: `/org/project`)
-- **Name** — Library or package name
-- **Description** — Short summary
-- **Code Snippets** — Number of available code examples
-- **Source Reputation** — Authority indicator (High, Medium, Low, or Unknown)
-- **Benchmark Score** — Quality indicator (100 is the highest score)
-- **Versions** — List of versions if available. Use one of those versions if the user provides a version in their query. The format is `/org/project/version`.
-
-### Selection process
-
-1. Analyze the query to understand what library/package the user is looking for
-2. Select the most relevant match based on:
-   - Name similarity to the query (exact matches prioritized)
-   - Description relevance to the query's intent
-   - Documentation coverage (prioritize libraries with higher Code Snippet counts)
-   - Source reputation (consider libraries with High or Medium reputation more authoritative)
-   - Benchmark score (higher is better, 100 is the maximum)
-3. If multiple good matches exist, acknowledge this but proceed with the most relevant one
-4. If no good matches exist, clearly state this and suggest query refinements
-5. For ambiguous queries, request clarification before proceeding with a best-guess match
-
-IMPORTANT: Do not call `ctx7 library` more than 3 times per question. If you cannot find what you need after 3 calls, use the best result you have.
-
-### Version-specific IDs
-
-If the user mentions a specific version, use a version-specific library ID:
+## Query a focused question
 
 ```bash
-# General (latest indexed)
-ctx7 docs /vercel/next.js "How to set up app router"
-
-# Version-specific
-ctx7 docs /vercel/next.js/v14.3.0-canary.87 "How to set up app router"
+ctx7 docs /vercel/next.js "How are request cookies read in the app router?" --json
 ```
 
-The available versions are listed in the `ctx7 library` output. Use the closest match to what the user specified.
+One question per distinct uncertainty usually gives better evidence. Query interacting features together when their interaction is the issue. Inspect JSON shape before scripting extraction; missing/empty content is not a successful answer even if the command exits zero.
 
-```bash
-# Output as JSON for scripting
-ctx7 library react "How to use hooks for state management" --json | jq '.[0].id'
-```
+Start with a resolve and one docs query, refine only if a material question remains. Avoid repeating identical requests. On rate limits or server errors, respect retry guidance, use a bounded retry, then fall back to official docs/local source. Do not settle for an unsupported claim merely because a call budget was reached.
 
-## Step 2: Query Documentation
+## Apply and attribute
 
-Retrieves up-to-date documentation and code examples for the resolved library.
+Compare examples with installed types and surrounding application conventions. A snippet may omit cleanup, validation, or production setup; retain the needed contract rather than copying blindly. Test the application change using its normal harness when implementation is requested.
 
-You must call `ctx7 library` first to obtain the exact Context7-compatible library ID required to use this command, UNLESS the user explicitly provides a library ID in the format `/org/project` or `/org/project/version`.
+Return the concrete API answer, target version, and direct documentation links carried by the retrieved material. If no source URL is returned, say the answer came from Context7 indexing and use official docs to establish precise attribution when needed. Never fabricate a link or a tested result.
 
-```bash
-ctx7 docs /facebook/react "How to clean up useEffect with async operations"
-ctx7 docs /vercel/next.js "How to add authentication middleware to app router"
-ctx7 docs /prisma/prisma "How to define one-to-many relations with cascade delete"
-```
+## Authoritative references
 
-IMPORTANT: Do not call `ctx7 docs` more than 3 times per question. If you cannot find what you need after 3 calls, use the best information you have.
+- [CLI usage](https://github.com/upstash/context7/tree/master/packages/cli)
+- [CLI docs command implementation](https://github.com/upstash/context7/blob/master/packages/cli/src/commands/docs.ts)
 
-### Writing good queries
-
-The query directly affects the quality of results. Be specific and include relevant details, but keep each query to one topic — if the question spans multiple distinct concepts, run a separate `ctx7 docs` command per concept instead of combining them, unless the question is about how the concepts interact. Do not include any sensitive or confidential information such as API keys, passwords, credentials, personal data, or proprietary code in your query.
-
-| Quality | Example |
-|---------|---------|
-| Good | `"How to set up authentication with JWT in Express.js"` |
-| Good | `"React useEffect cleanup function with async operations"` |
-| Bad (too vague) | `"auth"` |
-| Bad (too vague) | `"hooks"` |
-| Bad (too broad) | `"routing and auth and caching in Next.js"` |
-
-Describe what to look up in the library's documentation in the query when possible — vague one-word queries return generic results, and multi-topic queries dilute ranking and return shallow results for each topic.
-
-The output contains two types of content: **code snippets** (titled, with language-tagged blocks) and **info snippets** (prose explanations with breadcrumb context).
-
-```bash
-# Output as structured JSON
-ctx7 docs /facebook/react "How to use hooks for state management" --json
-
-# Pipe to other tools — output is clean when not in a TTY (no spinners or colors)
-ctx7 docs /facebook/react "How to use hooks for state management" | head -50
-ctx7 docs /vercel/next.js "How to add middleware for route protection" | grep -A5 "middleware"
-```
-
-## Authentication
-
-Works without authentication. For higher rate limits:
-
-```bash
-# Option A: environment variable
-export CONTEXT7_API_KEY=your_key
-
-# Option B: OAuth login
-ctx7 login
-```
+Checked 2026-09-12. Commands and indexed coverage can change; local help and current official documentation control execution.

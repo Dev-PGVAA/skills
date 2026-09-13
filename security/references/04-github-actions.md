@@ -12,7 +12,7 @@ Touch ID protects only local Mac decryption. CI needs its own portable age ident
 
 ## Safe workflow shape
 
-Start from `assets/github-actions-sops.yml`. It installs a pinned SOPS version and runs the application command through `sops exec-env`, keeping plaintext out of the checkout.
+Start from `assets/github-actions-sops.yml`. It installs a pinned SOPS version and runs the application command through `sops exec-env`, keeping plaintext out of the checkout. Bind the age identity only to the command step, never to the job or installer steps. The child command removes the identity environment variables before starting the application; encrypted application values are still plaintext in its environment.
 
 Review before use:
 

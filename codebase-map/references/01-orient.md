@@ -1,33 +1,31 @@
-# Part 1 — Orient
+# Orient a repository
 
-Create or refresh a **living map** so future sessions start oriented.
+## Discover incrementally
 
-## Outputs (write these)
+1. Confirm checkout, branch/revision, local changes, and applicable instructions. Read an existing architecture index first, then verify the sections needed for this task.
+2. Inspect manifests, workspace definitions, entrypoints, build scripts, and deployment configuration. Use `rg --files` and targeted symbol search; exclude generated output, dependencies, caches, and vendored code unless relevant.
+3. Trace one representative flow end-to-end. Record how input reaches business logic, persistence, background work, and output. Find tests at those boundaries.
+4. Group modules by the actual code organization. Treat path names as clues, not proof. Distinguish checked configuration from live topology.
+5. Stop when the user's navigation questions are answered; expand only a material unresolved boundary.
 
-1. `docs/architecture/INDEX.md` — 1-page table of contents + how to use the map
-2. `docs/architecture/OVERVIEW.md` — purpose, stack, high-level layers, runtime topology
-3. `docs/architecture/MODULES.md` — major modules/packages: path, responsibility, key entry files
-4. `docs/architecture/WHERE.md` — “where to look for X” index (auth, payments, jobs, UI shells, config, tests…)
-5. Optional: `docs/architecture/DEPS.md` — important dependency directions / forbidden imports
-6. Root `AGENTS.md` (or update existing): **≤ ~80–100 lines**, pointer-style only:
-   - 2–3 sentence project blurb
-   - “Read docs/architecture/INDEX.md first”
-   - build/test commands
-   - 3–5 critical constraints
-   - link to conventions if any
+## Persistent outputs scale with the repository
 
-## Method
+Reuse the established docs location. For a small repository, one `docs/architecture/INDEX.md` can hold the map. Split when sections become hard to navigate:
 
-1. Detect stack from manifests and entrypoints (do not guess).
-2. List top-level dirs and assign each a one-line role.
-3. Find entry points (main, app router, server bootstrap, workers).
-4. Group into layers or features from **evidence in the tree**, not ideal theory.
-5. Build WHERE.md from real paths (grep/symbols when needed).
-6. Prefer update-in-place: mark stale sections, do not rewrite what is still true.
+| File | Useful contents |
+|---|---|
+| `INDEX.md` | Purpose, inspected revision/date, map links, quickest entrypoints |
+| `OVERVIEW.md` | Components, runtime roles, principal flows, known unknowns |
+| `MODULES.md` | Real module path, responsibility, entrypoint, key dependency |
+| `WHERE.md` | User concept → code/test/config paths, with one-line guidance |
+| `DEPS.md` | Important dependency directions, evidenced constraints, cycles worth knowing |
 
-## Rules
+Omit files without useful contents. Do not invent auth/payments/jobs sections for an application that lacks them. Link claims to files and symbols; use line numbers only when verified and helpful.
 
-- Evidence only: every module claim must map to a path that exists.
-- No essay: short bullets and tables.
-- Do not invent microservices or CQRS if the repo is a simple app.
-- After writing, state: “Orientation ready — start from docs/architecture/INDEX.md”.
+A short pointer in an existing `AGENTS.md` can make a requested persistent map discoverable. Add it without truncating, rewriting, or overriding existing instructions. Do not impose line limits or “always read the entire map” instructions. Do not create or modify agent instructions for a read-only orientation request.
+
+## Keep it maintainable
+
+Record revision/date and whether the working tree contained relevant local changes. On refresh, use the diff and changed manifests/entrypoints to identify affected sections. Retain valid human-written text, repair moved paths, and mark uncertainty instead of silently substituting a guessed architecture. Declare commands as discovered, executed successfully, or unverified.
+
+Check that linked files exist and that the most important flow can be followed from the index. If a map is stale, use the source of truth and update only within the user's requested write scope.

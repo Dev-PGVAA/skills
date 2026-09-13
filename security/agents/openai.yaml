@@ -1,4 +1,4 @@
 interface:
   display_name: "Security"
-  short_description: "AI security audit and project secrets"
-  default_prompt: "Audit an AI system or secure project secrets"
+  short_description: "Evidence-based AI audits and secret management"
+  default_prompt: "Use $security to assess the stated security scope and verify the relevant boundaries."

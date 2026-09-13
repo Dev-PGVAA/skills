@@ -1,4 +1,4 @@
 interface:
   display_name: "Product"
-  short_description: "Idea to code pipeline in four parts"
-  default_prompt: "Validate an idea, plan, spec and build"
+  short_description: "Evaluate, plan, and deliver the authorized product"
+  default_prompt: "Use $product to advance this idea or implementation request from its current stage to a verified outcome."

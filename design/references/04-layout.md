@@ -1,27 +1,13 @@
-# Part 4 — Layout (hierarchy, grid, alignment)
+# Layout — hierarchy and content order
 
-Part of design. Works standalone.
+Make importance and relationships visible. Identify the main task per region and ensure actions are distinguishable; multi-panel workflows can legitimately have several primary actions in separate contexts.
 
-Deep layer: hierarchy cues — `references/deep/02-visual-hierarchy.md`; full grid/spacing tables — `references/deep/04-layout-grid-spacing.md`.
+Use size, weight, position, grouping, and contrast according to content. Color cannot be the only signal for meaning. Keep semantic heading order separate from visual size. Consistent treatment should communicate recurring roles, not force unrelated content into identical cards.
 
-- One focal point and one primary action per view; if two things compete, demote one.
-- Hierarchy uses ≥2 channels (size + weight, size + spacing); never color alone. Same semantic importance = same token; different treatment must mean different meaning.
-- Real heading order h1→h2→h3, no skips, no levels used merely for size.
-- Every element aligns to an axis or a sibling; one dominant alignment per composition. Edge alignment beats center for >3 elements.
-- Group with whitespace first, background tint second, border third, shadow last — one mechanism per boundary, not stacked.
-- Grid: 12 columns desktop (2–4 mobile, 8 tablet), consistent gutters; text containers capped ~65ch; forms 480–640px; app container 1200–1440px.
-- Design down to 320px width: no horizontal scroll, explicit stacking order.
-- Reading patterns: F for text-heavy, Z for sparse/visual — front-load headings and first sentences; identity top-left, action bottom-right.
-- Blur test: the intended reading order must survive a blurred screenshot as blobs of weight.
+Choose the simplest suitable layout—flow, flex, grid, columns, or platform containers. Twelve columns and 1200–1440px containers are options, not defaults for every surface. Content length and user tasks determine density and breakpoints. Familiar F/Z scanning patterns are hypotheses, not laws or a reason to force the CTA to a corner.
 
-Decision rules:
+Use whitespace, surfaces, borders, and elevation to explain boundaries. Combine them where useful; reduce redundant decoration. Preserve actual data density and content rather than removing important fields to make a screenshot airy.
 
-```text
-IF two elements look almost identical but differ in purpose → make the difference explicit or make them identical.
-IF grouping is done with boxes/borders → first try whitespace alone.
-IF a layout feels cluttered → reduce competing type styles before removing content.
-IF a layout feels cramped → increase whitespace; don't shrink type below floors.
-IF every section is separated by the same gap → introduce 2–3 spacing levels.
-IF two actions both look primary → demote one.
-IF the blur test fails → increase differences (size/weight/space), don't add elements.
-```
+Check narrow, intermediate, and wide layouts plus zoom, long labels, localization, empty content, and large data. Web reflow generally needs usable content at 320 CSS px equivalent width; genuinely two-dimensional tables/maps may scroll within an appropriate region. See [Accessibility](09-accessibility.md) for scope and exceptions.
+
+A screenshot can reveal hierarchy and clipping; verify interactive reading/focus order separately. More detail: [Hierarchy](deep/02-visual-hierarchy.md), [Grid and spacing](deep/04-layout-grid-spacing.md).

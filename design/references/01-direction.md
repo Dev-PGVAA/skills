@@ -1,67 +1,20 @@
-# Part 1 — Direction (understand the product, build the visual world)
+# Direction — product purpose and visual language
 
-Part of design. Works standalone. Establishes everything BEFORE any code. **No layout, tokens, or components until this pass is written down.**
+Start with the actual surface, content, assets, existing styles, and requested change. For a narrow refinement a short internal decision is enough; do not block coding on a written manifesto.
 
-Deep layer: elements, principles, Gestalt — `references/deep/01-design-fundamentals.md`.
+Establish the primary user task, audience, surface mode, constraints, locked references, existing fonts/colors/components, and what may change. Infer from evidence where possible. Separate user locks from your assumptions.
 
-## Understand before designing
-
-Establish (infer from context/code/assets if unstated, and state assumptions):
-
-1. What the product is, who uses it, and the single primary action per surface.
-2. Brand character: seriousness/playfulness, density, market clichés to avoid, existing fonts/colors/assets.
-3. **Anti-references (required):** 2–3 looks this must NOT resemble. Name them. Typical defaults: "generic AI SaaS landing", "Linear clone", "Dribbble glass dashboard", "cream editorial template".
-4. **Reference lock:** if the user pinned screenshots, fonts, or a live site, those win over your taste. Quote what is locked.
-5. The surface's **mode** — it decides what "good" means:
-
-| Mode | Surface | Success looks like |
+| Mode | Typical surface | Priority |
 |---|---|---|
-| Persuade | Landing, marketing, pricing | Visitor decides and acts; design is the product |
-| Operate | App UI, dashboards, settings | Task completion; scanability, consistency, native expectations outrank expression |
-| Read | Docs, articles, changelogs | Comprehension; structure first, then a reading experience worth staying in |
-| Experience | Portfolios, galleries | The artifact leads; the interface recedes |
+| Persuade | Landing, marketing, pricing | Understand the offer, assess proof, take a meaningful action |
+| Operate | App, dashboard, settings | Complete tasks, scan data, recover from errors |
+| Read | Document, article, report | Comprehend, navigate, cite and revisit |
+| Experience | Portfolio, gallery | Encounter the work with useful context |
 
-## Signature gate (hard — before any code)
+For new direction or substantial redesign, describe a compact concept: palette roles, type roles, content structure, representative first screen, and the reason it fits this subject. A signature detail can help an expressive brief; it is optional for operational work. Structure must encode real content, not decorative numbering or fictional data.
 
-Write this block. If it is missing, stop and write it. Do not generate UI.
+Use user-provided references faithfully. Anti-references are useful only when they clarify an ambiguous brief; do not invent two or three forbidden looks. Familiar fonts, neutral palettes, cards, and standard controls can be correct. Avoid both blindly repeating a template and changing a working identity merely to be unusual.
 
-```
-SURFACE MODE: persuade | operate | read | experience
-ANTI-REFERENCES: …
-LOCKED: (fonts / palette / components the brief pinned, or "none")
-SIGNATURE (1–2): the thing this will be remembered by
-  — must come from the subject's world (materials, tools, vernacular, data shape)
-  — examples of valid signatures: a display face used only on one word; a numbering system that is real content; a material (newsprint, machined aluminum, warehouse stencil); one component treated as a character
-BOLD MOVE: the single place taste is spent. Everywhere else is quiet.
-VISUAL TENSION: what stops this from being average (contrast, density, asymmetry, crop, type size jump)
-STACK: if the repo already has Tailwind / shadcn / CSS tokens — name them; new work consumes them
-```
+Before implementation check that content, interaction and layout support the user's goal, and that the planned changes fit the actual stack. Reuse existing tokens and components. A new aesthetic does not authorize replacing copy, removing features, adding unsupported claims, or changing information architecture outside scope.
 
-Rules for the signature:
-- One or two. Not five.
-- It is loud. The rest of the system is disciplined around it.
-- It cannot be a gradient, a blob, or "a unique color palette". Those are not signatures.
-- Structure must encode something true (numbering only if the content is a sequence).
-
-## Build a visual world (before any code)
-
-Plan in a compact written pass before building:
-
-- **Palette**: 4–6 named hex values with roles (bg, surface, text, accent, +1). No gradients without a product reason. ≤5 hues. Accent ≤10% of the view.
-- **Type**: 2–3 roles — a characterful display face used with restraint, a neutral body face, optionally a utility/mono face for data. Name the families. Do not pick from the anti-slop ban list unless locked.
-- **Layout concept**: one sentence + ASCII wireframe of the hero/first screen. Not "three cards under a hero".
-- **Signature + bold move**: copied from the gate above.
-- **Spend boldness in one place**: signature loud, everything else quiet.
-
-## Calibrate against AI defaults
-
-Known AI-default clusters — refuse these unless the brief is literally that look:
-
-- (a) cream `#F4F1EA` + high-contrast serif + terracotta accent
-- (b) near-black + single acid-green/vermilion accent
-- (c) broadsheet hairlines + zero radius + dense columns as a "editorial" costume
-- plus the 2026 ban list in `07-anti-slop.md`
-
-Any match must be a justified choice for THIS brief, not a reflex. Where the brief leaves an axis free, don't spend it on a default.
-
-Confirm the plan is something you would not produce for any other similar product — then build exactly to plan, deriving every value from it. If you cannot tell this product from a competitor by squinting at the first screen, the direction has failed; rewrite the signature, do not start coding.
+More detail: [Design fundamentals](deep/01-design-fundamentals.md). Evaluate generic patterns with [Specificity review](07-anti-slop.md).

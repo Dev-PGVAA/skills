@@ -1,50 +1,21 @@
-# Part 10 — Review (bounded verify loop + acceptance)
+# Review — observable findings and verified fixes
 
-Part of design. Works standalone. Verify in bounded passes, not an endless polish loop.
+Start from the brief, actual artifact, and scope. Read [Detailed checklist](deep/08-design-review-checklist.md) for a broader audit when useful. Inspect only relevant categories for a narrow change.
 
-Full pass/fail checklist: `references/deep/08-design-review-checklist.md`.
+## Inspect
 
-## Gate 0 — direction and slop (fail = not done)
+1. Compare the current artifact to the user request and prior version. Preserve locked identity, content, behavior, and scope; inspect a new design for fit to its intended task.
+2. Walk the primary flow and meaningful empty/loading/error/success states. Use real or clearly labeled representative content, including long strings and realistic data density.
+3. Inspect typography, hierarchy, spacing, clipping, alignment, and visual consistency at representative narrow, middle, and wide sizes or rendered pages. Diagnose consequences rather than counting off-scale pixels.
+4. Measure relevant contrast pairs and inspect keyboard, focus, zoom/reflow, motion preferences, and accessible naming with available tools. Automated tests and static screenshots cover different things.
+5. Check that new UI reuses existing primitives where appropriate and that apparent product proof matches implemented behavior. A successful build does not establish a working live flow.
 
-Run this before craft. A single fail stops the review; go back to `01-direction.md` / `07-anti-slop.md`.
+## Findings and fix loop
 
-- [ ] Direction pass exists (mode, anti-references, signature, bold move)
-- [ ] Signature is visible on the first screen
-- [ ] The first screen could not be reused for a different product by swapping the logo
-- [ ] No unjustified item from the 2026 ban list in `07-anti-slop.md`
-- [ ] Copy would not survive transfer to another product unchanged
-- [ ] Tokens exist and the UI consumes them (no raw one-off hex/px at point of use)
+Report reproducible issues with location, state/viewport, evidence, user consequence, and smallest useful fix. Separate requirement/functional/accessibility blockers from optional taste suggestions. Do not fail a review because a system font, card, or familiar CTA exists.
 
-## Pass 1 — inspect (batched)
+Batch independent fixes, rerun affected checks, and inspect the integrated result. Continue while actionable defects remain and useful verification is possible; stop when acceptance criteria pass or a concrete limitation prevents further proof. No arbitrary two-pass ceiling, endless aesthetic exploration, or mandatory removal of an accessory.
 
-- Blur/squint the screenshot: reading order intact? one focal point?
-- Walk the hard-rule checklist: every size on scale? every spacing from scale? stray 13/15/17/22px values? ≤2 families? measure ≤75ch? body ≥16px?
-- Contrast: compute worst pairs (secondary text on surface, text over images/scrim, disabled).
-- Responsive: 320 / 768 / 1440 representative checks; no horizontal overflow.
-- Keyboard tab-through; reduced-motion emulation; grayscale screenshot.
-- Stack: if the project uses Tailwind/shadcn, new components reuse existing tokens and primitives.
+## Completion evidence
 
-## Pass 2 — fix everything found in ONE batch, re-verify once. Stop.
-
-A second full round only if pass 2 surfaced new blockers. Open-ended self-QA burns money and makes things worse.
-
-Self-critique during build: take one accessory off before shipping (Chanel). Report honestly what passed and what was deliberately excepted.
-
-## Acceptance criteria
-
-Done means ALL of:
-
-1. Direction is product-specific (couldn't be pasted onto another product)
-2. One signature element, everything else disciplined
-3. Tokens defined and consumed (type/spacing/color/radius)
-4. Typography, hierarchy, spacing pass every hard rule
-5. All component states designed
-6. Targets and contrast gates pass
-7. Motion purposeful, within part 6 bounds (feedback <300ms, overlays ≤500ms)
-8. Copy specific; no banned marketing words without a claim
-9. Responsive to 320px
-10. Accessibility gates green
-11. Anti-slop inventory empty or fully excepted
-12. Verified in bounded passes with fixes batched
-
-If any box is unchecked, the artifact is not done. Do not call it "almost".
+State what changed, which flows/states/sizes were observed, relevant automated results, and what could not be verified. Link screenshots/pages or describe reproducible evidence when helpful. A screenshot-only review may assess layout and visible contrast but cannot claim keyboard, screen-reader, motion, or live-provider success. Do not label a partial checklist "WCAG compliant."

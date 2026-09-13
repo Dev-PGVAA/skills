@@ -1,59 +1,45 @@
 ---
 name: design
-description: All-in-one modular design skill — ten invokable parts plus a deep reference layer. Parts — direction (product understanding, visual world, signature), tokens (type scale, spacing, color tokens), typography (fonts, size, leading, measure), layout (hierarchy, grid, alignment), components (buttons, states, targets), motion (easing, durations), anti-slop (AI-default suspects, de-slop), copy (UI text rules), a11y (WCAG gates), review (verify loop, acceptance). Deep layer — full M3/Apple/Carbon scales; design-to-code handoff (tokens → CSS variables / Tailwind); WCAG 2.2 gates, WCAG numbers, Gestalt, pass/fail checklist in references/deep/. Invoke a part by name or run the whole workflow for building, redesigning or critiquing websites, UI, dashboards, docs, slides, infographics. Triggers include design, redesign, typography, fonts, layout, palette, infographic.
+description: Design, refine, or review visual interfaces and artifacts using product-specific hierarchy, typography, layout, components, copy, motion, and accessibility. Preserve the existing visual language unless redesign is requested; choose only the relevant design parts.
 ---
 
-# Design — One Skill, Ten Parts
+# Design
 
-You are an award-winning design director with production-grade engineering craft. This skill is the whole design stack split into parts you can invoke individually. Each part lives in `references/` and is self-contained.
+Make the artifact serve its users and subject. The user's brief, existing product behavior, brand, content, platform, and accessibility requirements take precedence over taste heuristics. Inspect the current artifact or relevant code/assets before making design claims.
 
-**Prime directives (apply always)**
+Refinement preserves established identity and working flows. Redesign changes the dimensions the user actually requested; it does not automatically discard all existing choices. An operational tool may benefit from familiar patterns and neutral typography. Novelty is useful only when it supports the brief.
 
-- The brief wins. Honor pinned aesthetics, fonts, palettes, and constraints exactly; redirecting a clear brief toward your taste is failure.
-- Refinement preserves (keep incumbent identity, copy, behavior); redesign replaces (keep product truth, treat the old look as anti-reference). Never split the difference.
-- Every visual decision is either **from the system you define** or a **documented deliberate exception**. Nothing accidental ships.
+## Routing
 
-## Parts
+Read only parts that affect this task. A narrow spacing fix does not require a direction manifesto or ten-stage workflow.
 
-| Part | File | Invoke for |
+| Part | Reference | Use for |
 |---|---|---|
-| `direction` | `references/01-direction.md` | Understand the product, pick the surface mode, build the visual world and signature |
-| `tokens` | `references/02-tokens.md` | Define the token system — type scale, spacing, color, radius, elevation |
-| `typography` | `references/03-typography.md` | Any font/size/leading/measure/tracking/paragraph decision |
-| `layout` | `references/04-layout.md` | Hierarchy, grid, alignment, grouping, responsive structure |
-| `components` | `references/05-components.md` | Buttons, states, touch targets, icons, platform conventions |
-| `motion` | `references/06-motion.md` | Any animation decision — whether, why, easing, duration |
-| `anti-slop` | `references/07-anti-slop.md` | De-slop pass, AI-default suspects, exception justification |
-| `copy` | `references/08-copy.md` | UI and marketing text, labels, errors, empty states |
-| `a11y` | `references/09-accessibility.md` | WCAG blocker gates and quick verification |
-| `review` | `references/10-review.md` | Final bounded verify loop, acceptance criteria |
+| direction | [Direction](references/01-direction.md) | Product intent, surface mode, existing visual language, deliberate new direction |
+| tokens | [Tokens](references/02-tokens.md) | Type, spacing, color, shape, and component roles |
+| typography | [Typography](references/03-typography.md) | Fonts, glyph coverage, measure, size, leading, data |
+| layout | [Layout](references/04-layout.md) | Hierarchy, grouping, grids, content order, responsive behavior |
+| components | [Components](references/05-components.md) | Controls, relevant states, interaction and platform patterns |
+| motion | [Motion](references/06-motion.md) | Feedback and state transitions with reduced-motion support |
+| anti-slop | [Specificity review](references/07-anti-slop.md) | Generic visual/copy patterns that obscure the product |
+| copy | [Copy](references/08-copy.md) | Labels, errors, empty states, marketing claims |
+| a11y | [Accessibility](references/09-accessibility.md) | Applicable WCAG requirements and practical checks |
+| review | [Review](references/10-review.md) | Evidence-based verification and prioritized findings |
 
-## How to invoke
+The deep references linked from each part provide optional domain detail. Numerical design scales are starting points, not universal requirements or proof of accessibility. Applicable standards, user requirements, and actual usability decide blockers.
 
-- User names a part (English or Russian keyword) → load ONLY that part's file and apply it to the task.
-- Exact numbers needed (scales, contrast ratios, token values, full checklist) → also load the matching deep file from the table below the parts table.
-- No part named + build/redesign request → run the full workflow, walking parts in order 01 → 10 (skip parts the task doesn't touch).
-- No part named + critique/polish request → load `review` first, then the parts matching the artifact's weak spots.
+## Independent design agents
 
-## Deep layer (full tables and checklists)
+For a substantial artifact use bounded independent review or nonoverlapping implementation when useful and permitted:
 
-Eight of the ten parts have a deep reference with complete scales, numbers and checklists — load it when you need exact values (motion, anti-slop and copy are self-contained, no deep file):
+- **Flow/content reviewer:** actual screens and user tasks; identify missing states, unclear actions, domain inaccuracies, and broken journeys.
+- **Accessibility reviewer:** specific flow, rendered UI and relevant source; return reproducible barriers, applicable criterion, severity, and untested areas.
+- **Visual reviewer:** current artifact, brief and prior version; assess hierarchy, typography, responsive behavior, and preservation of identity with screenshot/page evidence.
 
-| Deep file | Extends part |
-|---|---|
-| `references/deep/01-design-fundamentals.md` | `direction` — elements, principles, Gestalt laws |
-| `references/deep/02-visual-hierarchy.md` | `layout` — hierarchy cues, scanning patterns |
-| `references/deep/03-typography.md` | `typography` — classifications, pairing, full rules by medium |
-| `references/deep/04-layout-grid-spacing.md` | `layout` — spacing tokens, grid, vertical rhythm, density |
-| `references/deep/05-color.md` | `tokens` — palette construction, semantic tokens, dark mode |
-| `references/deep/06-ui-design.md` | `components` — M3/Apple type scales, states, platforms |
-| `references/deep/07-accessibility.md` | `a11y` — full WCAG gates and verification |
-| `references/deep/08-design-review-checklist.md` | `review` — pass/fail audit checklist |
+Provide the real brief, assets, scope, input states, allowed actions, output format, and effort limit; avoid priming reviewers with desired findings. The parent owns direction, shared tokens, final implementation, and synthesis. Only assign disjoint files for concurrent edits. Do not send multiple designers to redesign the whole product. No recursive delegation by default; use sequential reviews for small work or unavailable tools.
 
-## Sources
+## Evidence and delivery
 
-Deep layer adapted from open-licensed sources — OERT (CC BY-SA 2.5, https://www.oert.org/en/), BCcampus Graphic Design and Print Production Fundamentals (CC BY 4.0, https://opentextbc.ca/graphicdesign/), Material Design 3 (CC BY 4.0), IBM Carbon, Google Fonts Knowledge; Butterick's Practical Typography and Apple HIG referenced as inspiration only — all rules here are an independent distillation, no text copied. Each deep file carries its own attribution line — preserve it when reusing (OERT CC BY-SA 2.5; BCcampus and Material Design 3 CC BY 4.0; WCAG numbers © W3C).
+Render or run the actual artifact when possible, inspect relevant states and representative sizes, then verify fixes. Code inspection and screenshots alone do not prove keyboard behavior, assistive-technology support, or live integration. State what was observed, what was checked in source, and what remains unverified. Do not claim WCAG conformance from a partial checklist or automated scan.
 
-## Usage
-
-This folder is a complete, self-contained prompt kit. To use as a plain prompt, paste this SKILL.md plus the needed part file(s) — or all ten in numbered order for the full workflow. To use as an auto-discovered skill, copy this folder to `~/.agents/skills/design/`.
+Deep reference attributions are retained from the source kit. They are attribution notices, not a claim that current platform documentation or all license terms have been independently audited. Use official current standards when precise compliance or platform-version details matter.

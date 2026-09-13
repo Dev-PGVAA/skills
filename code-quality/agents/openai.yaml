@@ -1,4 +1,4 @@
 interface:
   display_name: "Code Quality"
-  short_description: "Coding discipline and defect-first review"
-  default_prompt: "Apply coding guidelines or review a change"
+  short_description: "Focused implementation and evidence-based reviews"
+  default_prompt: "Use $code-quality to review this change for actionable defects."

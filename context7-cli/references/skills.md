@@ -1,118 +1,30 @@
-# Skills Commands
+# Legacy Context7 skill management
 
-Manage AI coding skills from the Context7 registry. Skills are Markdown files that teach AI coding agents best practices, patterns, and workflows for specific libraries or tasks.
+Upstream's `ctx7 skills` command family is deprecated and marked for removal in the next major release as inspected on 2026-09-12. Do not build a new general skill-management workflow around it. Use an available native skill installer/creator for ordinary installation or creation; this reference supports users who explicitly request ctx7 or maintain an older setup.
 
-## Install
+## Inspect before acting
 
-Install skills from any GitHub repository. Repository format is always `/owner/repo`.
+Check the installed version and `ctx7 skills --help`. If unavailable, explain the compatibility issue and use the requested repository through an available installation method. Do not downgrade or install globally without task authorization.
 
-```bash
-ctx7 skills install /anthropics/skills           # Interactive — pick from a list
-ctx7 skills install /anthropics/skills pdf        # Install a specific skill by name
-ctx7 skills install /anthropics/skills --all      # Install everything without prompting
-```
-
-Target a specific IDE with a flag:
-```bash
-ctx7 skills install /anthropics/skills pdf --claude     # Claude Code only
-ctx7 skills install /anthropics/skills pdf --cursor     # Cursor only
-ctx7 skills install /anthropics/skills pdf --universal  # Universal (.agents/skills/)
-ctx7 skills install /anthropics/skills --all --global   # All skills, global install
-```
-
-Alias: `ctx7 si /anthropics/skills pdf`
-
-## Search
-
-Find skills across the entire registry by keyword. Shows an interactive list with install counts and trust scores. Select to install.
+When supported, read-only inspection typically includes:
 
 ```bash
-ctx7 skills search pdf
-ctx7 skills search typescript testing
-ctx7 skills search react nextjs
+ctx7 skills info /owner/repo
+ctx7 skills list
 ```
 
-Alias: `ctx7 ss pdf`
+Repository names are placeholders; substitute the user's actual source. Search/suggest commands may launch an interactive install flow, so do not treat their entire interaction as read-only.
 
-## Suggest
+## Install / remove safely
 
-Auto-detects your project dependencies and recommends relevant skills from the registry.
+1. Resolve the exact source revision, selected skills, destination, and project/global scope.
+2. Inspect skill instructions, scripts, external dependencies, and symlink destinations. Registry scores or install counts do not establish safety.
+3. Back up existing same-name skills before replacement. Do not follow symlinks into unrelated shared roots or remove bundled/system skills as collateral cleanup.
+4. Run only supported flags for the intended target. Do not use `--all` unless the user requested every skill from that source.
+5. Validate metadata, local references, scripts where applicable, and the on-disk installed contents. Distinguish installed files from skills discovered by a still-running host.
 
-```bash
-ctx7 skills suggest           # Scan current project, install to project
-ctx7 skills suggest --global  # Install suggestions globally
-ctx7 skills suggest --claude  # Target Claude Code only
-```
+## Generate
 
-Reads `package.json`, `requirements.txt`, `pyproject.toml`, `Cargo.toml`, `go.mod`, `Gemfile`. Falls back to suggesting `ctx7 skills search` if no dependencies are detected.
+If an older version offers `skills generate`, inspect current authentication, privacy, cost, and limits at execution time. Do not assert fixed free/pro quotas. Generated skills need review and validation before installation; remote generation does not bypass the user's scope or content-sharing constraints.
 
-Alias: `ctx7 ssg`
-
-## Generate (AI-powered)
-
-Generate a custom skill tailored to your stack using AI. **Requires login.**
-
-```bash
-ctx7 skills generate
-ctx7 skills generate --claude   # Install directly to Claude Code
-ctx7 skills generate --global   # Install to global skills
-```
-
-Interactive flow:
-1. Describe the expertise you want (e.g., "OAuth authentication with NextAuth.js")
-2. Select relevant libraries from search results
-3. Answer 3 clarifying questions to focus the skill
-4. Review the generated skill, request changes if needed
-5. Choose where to install it
-
-**Limits:** Free accounts get 6 generations/week, Pro accounts get 10.
-
-Aliases: `ctx7 skills gen`, `ctx7 skills g`
-
-## List
-
-Show all installed skills for the current project or globally.
-
-```bash
-ctx7 skills list                  # Current project (all detected IDEs)
-ctx7 skills list --claude         # Claude Code only
-ctx7 skills list --global         # Global skills
-ctx7 skills list --global --claude # Global Claude Code skills
-```
-
-## Remove
-
-Uninstall a skill by name.
-
-```bash
-ctx7 skills remove pdf
-ctx7 skills remove pdf --claude   # From Claude Code only
-ctx7 skills remove pdf --global   # From global skills
-```
-
-Aliases: `ctx7 skills rm`, `ctx7 skills delete`
-
-## Info
-
-Browse all skills in a repository without installing — useful for previewing what's available.
-
-```bash
-ctx7 skills info /anthropics/skills
-```
-
-Output shows each skill name, description, and URL, plus quick install commands.
-
-## IDE Flags
-
-All skills commands accept these flags to target a specific AI coding assistant:
-
-| Flag | Directory | Used by |
-|------|-----------|---------|
-| `--universal` | `.agents/skills/` | Amp, Codex, Gemini CLI, OpenCode, GitHub Copilot |
-| `--claude` | `.claude/skills/` | Claude Code |
-| `--cursor` | `.cursor/skills/` | Cursor |
-| `--antigravity` | `.agent/skills/` | Antigravity |
-
-Without a flag, the CLI prompts you to select one or more targets interactively.
-
-Add `--global` to any flag to install in your home directory instead of the current project.
+[Upstream skill command and deprecation notice](https://github.com/upstash/context7/blob/master/packages/cli/src/commands/skill.ts).

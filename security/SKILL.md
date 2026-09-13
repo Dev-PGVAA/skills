@@ -1,63 +1,36 @@
 ---
 name: security
-description: >
-  Security for AI products and project secrets, in two invokable parts.
-  Audit — evidence-driven audit and threat modeling of AI agents, LLM applications,
-  RAG pipelines, MCP servers, tools and multi-agent systems; treats the model as
-  untrusted, tests prompt injection and attack chains, maps findings to OWASP
-  GenAI LLM Top 10 2026 and OWASP Top 10 for Agentic Applications (ASI01–ASI10)
-  plus MITRE ATLAS, and produces a P0–P2 remediation roadmap with runtime
-  guardrail recommendations. Secrets — migrate plaintext .env files into Git-safe
-  SOPS + age encrypted files with 1Password as the synchronized identity vault
-  (or macOS Secure Enclave), add GitHub Actions decryption, audit Git history for
-  leaks, onboard devices and rotate recipients without ever printing secret values.
-  Invoke a part by name. Triggers include security audit, threat model, red-team,
-  prompt injection, excessive agency, memory poisoning, secure secrets, .env, sops,
-  OWASP LLM, agentic security.
+description: Audit security boundaries in AI, agent, RAG, and MCP systems, or manage project secrets with SOPS and age. Use for threat models, scoped security reviews, encrypted dotenv migration, recipient rotation, and secret exposure response.
 ---
 
-# Security — audit AI systems, protect project secrets
+# Security
 
-Two parts, one domain. Load the part that matches the task.
+Find evidence-backed security failures and keep project secrets out of logs and Git. A model, prompt, or classifier is not a deterministic authorization boundary.
 
-## Parts
+## Choose the work
 
-| Part | File | Invoke for |
-|---|---|---|
-| `audit` | `references/01-audit.md` | Threat-model and audit an AI/LLM/agent/MCP system; prompt injection, exfiltration, blast radius, excessive agency, memory poisoning |
-| `secrets` | `references/02-secrets.md` | SOPS + age setup, .env migration, 1Password identities, CI decryption, rotation, incidents |
+- **Audit:** [audit workflow](references/01-audit.md), then the relevant rows of its domain matrix. A focused review does not require every category or live payload testing.
+- **Secrets:** [secret workflows](references/02-secrets.md). Preserve the user's existing vault and identity profile; SOPS+age is a supported option, not a requirement to migrate an already suitable system.
+- **Special cases:** [platforms/keys](references/03-platform-and-keys.md), [GitHub Actions](references/04-github-actions.md), [incident response](references/05-incident-response.md).
 
-## How to invoke
+## Boundaries
 
-- User names a part (or asks for an audit / encrypt the env) → load that part’s file and follow it.
-- `secrets` deeper references load on demand — `references/03-platform-and-keys.md`, `references/04-github-actions.md`, `references/05-incident-response.md`. Scripts in `scripts/`, CI template in `assets/`.
-- Audit modes escalate only with explicit authorization — PASSIVE → SAFE_ACTIVE → AUTHORIZED_RED_TEAM.
+Use existing task authorization. Passive review and isolated local tests with synthetic data can proceed within scope; new external targets, destructive tests, real-data exfiltration, shared-history rewriting, and credential revocation require authority for that concrete action. Do not ask again for already-authorized work or treat this skill as granting more permission.
 
-## 2026 framework anchors (audit)
+Never print secret values, private identities, or decrypted dotenv contents. Report redacted evidence, paths, categories, public recipient types, and coverage. Do not claim decryption, CI, provider rotation, recovery, or live security testing unless actually verified.
 
-Map findings to:
+## Parallel audit and verification
 
-**OWASP GenAI LLM Top 10 2026** (high-level):
-1. Prompt Injection
-2. Sensitive Information Disclosure
-3. Excessive Agency
-4. Supply Chain
-5. Data and Model Poisoning
-6. Unbounded Consumption
-7. Misinformation
-8. Hidden Context Exposure
-9. Vector and Embedding Weaknesses
-10. Improper Output Handling
+Use subagents only for independent, bounded work. Give each the target revision, allowed surfaces, test mode, synthetic fixtures, resource limits, and an evidence contract. Suitable roles: authorization/data-flow reviewer; tool/MCP/sandbox reviewer; independent reproducer for a proposed finding. Keep the parent on cross-boundary attack chains, severity, duplicate removal, and synthesis.
 
-**OWASP Top 10 for Agentic Applications (ASI)**:
-- ASI01 Agent Goal Hijack
-- ASI02 Tool Misuse & Exploitation
-- ASI03 Identity & Privilege Abuse
-- ASI04 Agentic Supply Chain Vulnerabilities
-- ASI05 Unexpected Code Execution
-- ASI06 Memory & Context Poisoning
-- ASI07 (and remaining entries for inter-agent, cascading failures, rogue agents, human-agent trust exploitation)
+Workers are read-only unless assigned specific isolated fixture files. No worker receives live credentials, expands target scope, or shares sensitive evidence with another service. For secret migrations, the parent alone owns keys, repository writes, and rotation; a worker may inspect scripts or test synthetic fixtures. If delegation is unavailable or unnecessary, use these roles sequentially. Never fan out offensive testing or recursive agents by default.
 
-Also reference MITRE ATLAS techniques where applicable.
+## Bundled helpers
 
-Hard boundary for both parts: never print or log secret values; report paths, names and recipient types only; never claim testing that did not happen. Security must hold even when the model behaves incorrectly.
+- `scripts/scan_git_secrets.py`: heuristic Git index/reachable-history scan; findings contain no values. A clean result is not proof that no secrets exist.
+- `scripts/setup_sops_age.sh`: scoped root `.env` bootstrap/migration, read-only verification, and audit. Read its help and the secrets reference before mutation.
+- `scripts/create_age_identity.sh`: identity generation outside Git with owner-only output.
+
+Helpers have specific coverage limits. Check them and installed tool help before running against user data. Framework IDs and tool releases drift; use current primary sources linked from the references rather than inventing versions.
+
+For helper maintenance, run `python3 tests/test_helpers.py` from this skill directory. Tests use disposable repositories and synthetic values; real SOPS/age checks skip explicitly when those tools are absent.
